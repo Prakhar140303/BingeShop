@@ -2,6 +2,7 @@ import React from 'react'
 import {Label} from '../ui/label'
 import {Input} from '../ui/input'
 import { Button } from '../ui/button'
+import {Textarea} from '@/components/ui/textarea'
 import {Select, SelectContent, SelectItem, SelectTrigger} from '../ui/select'
 import { SelectValue } from '@radix-ui/react-select';
 function CommonForm({formControls, formData, setFormData,onSubmit, buttonText}) {
@@ -13,7 +14,7 @@ function CommonForm({formControls, formData, setFormData,onSubmit, buttonText}) 
             case 'input':
                 element =( <Input 
                 name={getControlItem.name}
-                placeholder={getControlItem.placeholder}
+                placeholder={getControlItem.placehzolder}
                 id ={getControlItem.name}
                 type={getControlItem.type}
                 value={value}
@@ -47,6 +48,9 @@ function CommonForm({formControls, formData, setFormData,onSubmit, buttonText}) 
                     placeholder={getControlItem.placeholder}
                     id={getControlItem.id}
                     value = {value}
+                    onChange={(event) => setFormData({
+                        ...formData,[getControlItem.name] : event.target.value
+                    })}
                     />
                 );
                 break;

@@ -2,16 +2,18 @@ import CommonForm from '@/components/common/form';
 import { registerFormControls } from '@/config';
 import React,{ useState} from 'react'
 import {Link} from 'react-router-dom'
+const initialState = {
+  username :'',
+  email : '',
+  password : '',
+}
 function AuthRegister() {
-  const initialState = {
-    username :'',
-    email : '',
-    password : '',
-  }
-  const [formData,setFromData] = useState(initialState);
+  const [formData,setFormData] = useState(initialState);
   function onSubmit(e){
-     
+    e.preventDefault();
+    
   }
+  console.log(formData );
   return (
     <div className='mx-auto w-full max-w-md space-y-6'>
       <div className='text-center'>
@@ -21,7 +23,7 @@ function AuthRegister() {
         formControls={registerFormControls}
         buttonText={'Sign up'}
         formData={formData}
-        setFormData={setFromData}
+        setFormData={setFormData}
         onSubmit={onSubmit}
       />
       <p className='mt-2'>Already have an account

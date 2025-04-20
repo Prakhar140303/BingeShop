@@ -1,9 +1,9 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
 // register
-const SignupController = async (req, res) => {
+export const SignupController = async (req, res) => {
     const {username, email, password} = req.body;
     if(!username || !email || !password) return res.status(400).json({message : "All fields are required"});
     try{
@@ -23,7 +23,7 @@ const SignupController = async (req, res) => {
 
 
 // login	
-const LoginController = async (req, res) => {
+export const LoginController = async (req, res) => {
     const { email, password} = req.body;
     if( !email || !password) return res.status(400).json({message : "All fields are required"});
     try{
@@ -41,5 +41,3 @@ const LoginController = async (req, res) => {
 
 
 
-
-export {SignupController, LoginController};
