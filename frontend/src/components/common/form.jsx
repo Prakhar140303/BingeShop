@@ -5,6 +5,9 @@ import { Button } from '../ui/button'
 import {Textarea} from '@/components/ui/textarea'
 import {Select, SelectContent, SelectItem, SelectTrigger} from '../ui/select'
 import { SelectValue } from '@radix-ui/react-select';
+import {motion} from 'framer-motion'
+
+const MotionButton = motion(Button);
 function CommonForm({formControls, formData, setFormData,onSubmit, buttonText}) {
     function renderInputsByComponentType(getControlItem){
         let element = null;
@@ -77,7 +80,7 @@ function CommonForm({formControls, formData, setFormData,onSubmit, buttonText}) 
                 </div>)
             }
         </div>
-        <Button type='submit' className='mt-2 w-full'>{buttonText || 'Submit'}</Button>
+        <MotionButton type='submit' whileHover={{scale:1.05}} className='mt-2 w-full'>{buttonText || 'Submit'}</MotionButton>
     </form>
   )
 }

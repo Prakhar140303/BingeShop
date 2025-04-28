@@ -8,8 +8,7 @@ function AuthLogin() {
     password : '',
   }
   const [formData,setFromData] = useState(initialState);
-  function onSubmit(e){
-     
+  function onSubmit(event){
   }
   return (
     <div className='mx-auto w-full max-w-md space-y-6'>
