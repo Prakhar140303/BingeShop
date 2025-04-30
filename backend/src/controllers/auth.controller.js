@@ -22,7 +22,7 @@ export const SignupController = async (req, res) => {
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        const newUser  = await User.create({username, email, password : hashedPassword});
+        const newUser  = await User.create({username, email, password : hashedPassword, role : req.body?.role || "user"});
         if(!newUser){
             return res.status(400).json({
                 success : false,
@@ -84,7 +84,11 @@ export const LoginController = async (req, res) => {
 
 // logout
 
-
+export const LogoutController  = (req, res) => {
+    res.clearCookie('token').json({
+        success : true,
+        message : "User logged out successfully"});
+}
 
 
 

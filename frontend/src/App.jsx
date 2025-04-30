@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import AuthLayout from './components/auth/layout.jsx'
 import AuthLogin from './pages/auth/login.jsx'
@@ -15,13 +16,22 @@ import ShoppingAccount from './pages/shopping-view/account.jsx'
 import NotFound from './pages/not-found/index.jsx'
 import CheckAuth from './components/common/check-auth.jsx'
 import UnauthPage from './pages/unauth-page/index.jsx'
+import { useSelector,useDispatch } from 'react-redux'
+import { checkAuth } from './store/auth-slice/index.js'
+import { Skeleton } from './components/ui/skeleton.jsx'
+import {motion} from 'framer-motion'
 function App() {
-  const isAuthenticated = false;
-  const user = {
-    name : 'Prakhar',
-    // role : 'admin'
+  const {isAuthenticated,user,isLoading} = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  console.log({user});
+  useEffect(() => {
+    console.log('check auth');
+    dispatch(checkAuth())
+  }, [dispatch])
+  if (isLoading) {
+    return <Skeleton className='w-[800px] bg-black h-[600px] rounded '/>
   }
-  return (
+  return ( 
     <div className='flex flex-col overflow-hidden bg-white'>
       <Routes>
         <Route path='/auth' element={<CheckAuth isAuthenticated={isAuthenticated} user={user}>
