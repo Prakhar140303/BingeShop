@@ -17,7 +17,7 @@ function CommonForm({formControls, formData, setFormData,onSubmit, buttonText}) 
             case 'input':
                 element =( <Input 
                 name={getControlItem.name}
-                placeholder={getControlItem.placehzolder}
+                placeholder={getControlItem.placeholder}
                 id ={getControlItem.name}
                 type={getControlItem.type}
                 value={value}
@@ -32,7 +32,7 @@ function CommonForm({formControls, formData, setFormData,onSubmit, buttonText}) 
                         ...formData,[getControlItem.name] : value
                     })} value= {value}>
                         <SelectTrigger>
-                            <SelectValue placeholder={getControlItem.placeholder} />
+                            <SelectValue placeholder={getControlItem.label} />
                         </SelectTrigger>
                         <SelectContent>
                             {

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import AuthLayout from './components/auth/layout.jsx'
+import AuthLayout from './components/auth/Layout.jsx'
 import AuthLogin from './pages/auth/login.jsx'
 import AuthRegister from './pages/auth/register.jsx'
 import AdminLayout from './components/admin-view/layout.jsx'
@@ -23,7 +23,7 @@ import {motion} from 'framer-motion'
 function App() {
   const {isAuthenticated,user,isLoading} = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  console.log({user});
+  console.log("IN app : ",{user});
   useEffect(() => {
     console.log('check auth');
     dispatch(checkAuth())
