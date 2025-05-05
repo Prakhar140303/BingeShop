@@ -1,11 +1,11 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRoutes from "./src/routes/auth-routes.js";
-
-dotenv.config();
+import adminProductRoutes from "./src/routes/products-routes.js";
 
 const app = express();
 app.use(express.json()); 
@@ -34,6 +34,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/admin/products", adminProductRoutes);
 
 app.listen(PORT, () => {
     console.log("Server is running on port 5000");

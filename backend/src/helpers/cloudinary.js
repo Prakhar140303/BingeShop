@@ -1,5 +1,8 @@
 import cloudinary from 'cloudinary'
 import multer from 'multer'
+import dontenv from 'dotenv'
+dontenv.config();
+console.log(process.env.CLOUDINARY_CLOUD_NAME);
 
 cloudinary.config({
     cloud_name : process.env.CLOUDINARY_CLOUD_NAME,
@@ -9,11 +12,11 @@ cloudinary.config({
 
 const storage = new multer.memoryStorage();
 
-async function handleImageUpload(file){
+async function imageUploadUtils(file){
     const result = await cloudinary.uploader.upload(file, 
         {resource_type : 'auto'},
     ); 
     return result;
 }
 const upload = multer({storage});
-export {upload, handleImageUpload};
+export {upload, imageUploadUtils};
