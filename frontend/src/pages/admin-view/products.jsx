@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import {Sheet,SheetContent, SheetHeader, SheetTitle} from '@/components/ui/sheet.jsx'
 // eslint-disable-next-line no-unused-vars
@@ -7,6 +7,8 @@ import { Plus } from 'lucide-react'
 import CommonForm from '@/components/common/form'
 import { addProductFormElements } from '@/config'
 import ProductImageUpload from './image-upload'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchAllProducts } from '@/store/product-slice'
 
 const initialFormData = {
   image : null,
@@ -24,12 +26,19 @@ function AdminProducts() {
   const [formData, setFormData] = useState(initialFormData);
   const [imageFile, setImageFile] = useState(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState('');
+  const [imageLoadingState, setImageLoadingState] = useState(false); 
+  const {productList} = useSelector((state) => state.product);
+  const dipatch = useDispatch();
   const onsubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
-    setFormData(initialFormData);
+    
   }
+  useEffect(()=>{
+    dipatch(fetchAllProducts);
+  },[dipatch]);
 
+  console.log(productList);
+  
   return (
     <>
       <div className='mb-5 flex justify-end'>
@@ -47,7 +56,13 @@ function AdminProducts() {
           <SheetHeader className='mb-4'>
             <SheetTitle>Add New Product</SheetTitle>
           </SheetHeader>
-          <ProductImageUpload imageFile={imageFile} setFile={setImageFile} uploadedImageUrl={uploadedImageUrl} setUploadedImageUrl={setUploadedImageUrl}/>
+          <ProductImageUpload imageFile={imageFile} 
+            setFile={setImageFile} 
+            uploadedImageUrl={uploadedImageUrl} 
+            setUploadedImageUrl={setUploadedImageUrl}
+            setImageLoadingState={setImageLoadingState}  
+            imageLoadingState={imageLoadingState}
+            />
           <div className='py-6'>
             <CommonForm formData={formData} 
                 onSubmit={onsubmit} 

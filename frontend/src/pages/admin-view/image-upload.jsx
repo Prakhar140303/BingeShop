@@ -4,7 +4,10 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { UploadCloudIcon , FileIcon,Trash2} from 'lucide-react';
 import axiosInstance from '@/lib/axiosInstance';
-function ProductImageUpload({imageFile, setFile, uploadedImageUrl, setUploadedImageUrl}) {
+import { Skeleton } from '@/components/ui/skeleton';
+function ProductImageUpload({imageFile, setFile,
+     uploadedImageUrl, setUploadedImageUrl, 
+      setImageLoadingState, imageLoadingState}) {
     const inputRef  = useRef(null);
     const handleImageFileChange = (event) => {
         const file = event.target.files?.[0];
@@ -23,13 +26,15 @@ function ProductImageUpload({imageFile, setFile, uploadedImageUrl, setUploadedIm
             setFile(droppedFile);
         }
     }
-    const handleRemoveImage =(event)=>{
+    const handleRemoveImage =()=>{
         setFile(null);
         if(inputRef.current){
             inputRef.current.value = '';
         }
     }
+    
     async function uploadImageToCloudinary() {
+        setImageLoadingState(true);
         const data = new FormData();
         data.append('my_file', imageFile);
         const response = await axiosInstance.post('/admin/products/upload-image', data);
@@ -37,12 +42,14 @@ function ProductImageUpload({imageFile, setFile, uploadedImageUrl, setUploadedIm
         if(response?.data?.success){
             setUploadedImageUrl(response.data.result.url);
         }
+        setImageLoadingState(false);
     }
     useEffect(() => {
         if(imageFile !== null){
             uploadImageToCloudinary();
         }
     },[imageFile]);
+
     console.log(imageFile)
     return (
         <div className='w-full max-w-md mx-auto mt-4'>
@@ -53,12 +60,14 @@ function ProductImageUpload({imageFile, setFile, uploadedImageUrl, setUploadedIm
                 className='hidden' 
                 ref={inputRef} onChange={handleImageFileChange}/>
                 {!imageFile ?
-                    <Label htmlFor='image-upload'
+                    (<Label htmlFor='image-upload'
                     className="flex flex-col items-center justify-center h-32 cursor-pointer">
                         <UploadCloudIcon className='w-10 h-10 text-muted-foreground'/>
                         <span>Drag & drop or click to upload</span>
-                    </Label> : 
-                    <div className='flex   items-center justify-between'>
+                    </Label>) : 
+                    (imageLoadingState ? 
+                        <Skeleton className='w-full h-10 bg-gray-500'/>
+                    :<div className='flex   items-center justify-between'>
                         <div className='flex items-center'>
                             <FileIcon className='w-8 text-primary mr-2 h-8'/>
                             <p className=''>{imageFile.name}</p>
@@ -70,7 +79,7 @@ function ProductImageUpload({imageFile, setFile, uploadedImageUrl, setUploadedIm
                                 <span className='sr-only'>Remove File</span>
                             </Button>
                         </div>
-                    </div>
+                    </div>)
 
                 }
             </div>
