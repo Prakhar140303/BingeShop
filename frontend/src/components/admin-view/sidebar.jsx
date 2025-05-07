@@ -70,7 +70,7 @@ function AdminSideBar({open,setOpen}) {
               Admin Panel
             </h1>
         </div>
-        <MenuItems />
+        <MenuItems  setOpen={setOpen}/>
        </aside> 
     </>
 

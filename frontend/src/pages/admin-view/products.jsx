@@ -8,8 +8,9 @@ import CommonForm from '@/components/common/form'
 import { addProductFormElements } from '@/config'
 import ProductImageUpload from './image-upload'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllProducts } from '@/store/product-slice'
-
+import { fetchAllProducts , addNewProduct} from '@/store/product-slice'
+import { useToast } from '@/hooks/use-toast';
+import  AdminProductTile  from '@/components/admin-view/product-tile.jsx';
 const initialFormData = {
   image : null,
   title : '',
@@ -28,20 +29,33 @@ function AdminProducts() {
   const [uploadedImageUrl, setUploadedImageUrl] = useState('');
   const [imageLoadingState, setImageLoadingState] = useState(false); 
   const {productList} = useSelector((state) => state.product);
-  const dipatch = useDispatch();
-  const onsubmit = (event) => {
+  const dispatch = useDispatch();
+  const toast = useToast();
+  function onsubmit(event){
     event.preventDefault();
-    
+    dispatch(addNewProduct({...formData,image : uploadedImageUrl}))
+    .then((data)=>{
+      console.log(data);
+      if(data?.payload?.success){
+        dispatch(fetchAllProducts());
+        setFormData(initialFormData);
+        setOpenCreateProductsDialog(false);
+        setImageFile(null);
+        setUploadedImageUrl('');
+        toast({
+          title : 'Product added successfully',
+        })
+      }
+    });
   }
   useEffect(()=>{
-    dipatch(fetchAllProducts);
-  },[dipatch]);
-
-  console.log(productList);
+    dispatch(fetchAllProducts());
+  },[dispatch]);
+  console.log({productList});
   
   return (
     <>
-      <div className='mb-5 flex justify-end'>
+      <div className='mb-5 flex justify-end w-full'>
         <motion.div whileTap={{scale : 0.98}}>
           <Button
             onClick={() => setOpenCreateProductsDialog(true)}>
@@ -50,6 +64,11 @@ function AdminProducts() {
             </Button>
         </motion.div>
       </div>
+      {
+        productList.map((product) => (
+          <AdminProductTile key={product._id} product={product} />
+        ))
+      }
       <div className='grid gap-4 md:grid-cols-3 lg:grid-cols-4'></div>
       <Sheet open={openCreateProductsDialog} onOpenChange={()=>setOpenCreateProductsDialog(false)}>
         <SheetContent side="right" className='overflow-auto'>

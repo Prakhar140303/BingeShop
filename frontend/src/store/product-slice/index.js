@@ -16,6 +16,9 @@ export const addNewProduct = createAsyncThunk('/product/add', async (formData) =
 })
 export const fetchAllProducts = createAsyncThunk('/product/fetchAllProducts', async () => {
     const result = await axiosInstance.get('/admin/products/getAll');
+    console.log("result :",result.data);
+    console.log("result2 :",result.data.data);
+
     return result?.data;
 })
 export const editProduct = createAsyncThunk('/product/editProduct', async ({id,formData}) => {
@@ -43,9 +46,8 @@ const AdminProductSlice = createSlice({
         builder.addCase(fetchAllProducts.pending,(state) => {
             state.isLoading = true;
         }).addCase(fetchAllProducts.fulfilled,(state,action) => {
-            console.log(action)
             state.isLoading = false;
-            state.productList = action.payload.products;
+            state.productList = action.payload.data;
         }).addCase(fetchAllProducts.rejected,(state) => {
             state.isLoading = false;
             state.productList = [];

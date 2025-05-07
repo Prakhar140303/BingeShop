@@ -49,8 +49,6 @@ function ProductImageUpload({imageFile, setFile,
             uploadImageToCloudinary();
         }
     },[imageFile]);
-
-    console.log(imageFile)
     return (
         <div className='w-full max-w-md mx-auto mt-4'>
             <Label className='text-lg font-semibold mb-2 block'>Upload Image</Label>
