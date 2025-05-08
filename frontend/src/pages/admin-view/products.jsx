@@ -55,6 +55,8 @@ function AdminProducts() {
   
   return (
     <>
+    <div  className='flex flex-col gap-4 w-full'>
+
       <div className='mb-5 flex justify-end w-full'>
         <motion.div whileTap={{scale : 0.98}}>
           <Button
@@ -64,11 +66,15 @@ function AdminProducts() {
             </Button>
         </motion.div>
       </div>
-      {
-        productList.map((product) => (
-          <AdminProductTile key={product._id} product={product} />
-        ))
-      }
+      <div className='flex flex-col gap-6'>
+        {
+          productList.map((product) => (
+            <AdminProductTile key={product._id} product={product} />
+          ))
+        }
+
+      </div>
+    </div>
       <div className='grid gap-4 md:grid-cols-3 lg:grid-cols-4'></div>
       <Sheet open={openCreateProductsDialog} onOpenChange={()=>setOpenCreateProductsDialog(false)}>
         <SheetContent side="right" className='overflow-auto'>
