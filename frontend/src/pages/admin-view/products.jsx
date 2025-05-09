@@ -55,7 +55,7 @@ function AdminProducts() {
   
   return (
     <>
-    <div  className='flex flex-col gap-4 w-full'>
+    <div  className='flex flex-col gap-4 w-full overflow-scroll'>
 
       <div className='mb-5 flex justify-end w-full'>
         <motion.div whileTap={{scale : 0.98}}>
@@ -66,7 +66,7 @@ function AdminProducts() {
             </Button>
         </motion.div>
       </div>
-      <div className='flex flex-col gap-6'>
+      <div className='flex flex-col gap-4'>
         {
           productList.map((product) => (
             <AdminProductTile key={product._id} product={product} />

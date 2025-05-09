@@ -1,4 +1,3 @@
-import { time } from "framer-motion";
 import mongoose from "mongoose";
 const ProductSchema = new mongoose.Schema({
     image: String,
