@@ -75,7 +75,6 @@ function AdminProducts() {
 
       </div>
     </div>
-      <div className='grid gap-4 md:grid-cols-3 lg:grid-cols-4'></div>
       <Sheet open={openCreateProductsDialog} onOpenChange={()=>setOpenCreateProductsDialog(false)}>
         <SheetContent side="right" className='overflow-auto'>
           <SheetHeader className='mb-4'>
