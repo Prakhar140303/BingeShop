@@ -19,7 +19,7 @@ const initialFormData = {
   brand: '',
   price : "",
   salePrice : 0,
-  TotalStock : '',
+  totalStock : '',
 }
 function AdminProducts() {
   const [openCreateProductsDialog,setOpenCreateProductsDialog] = useState(false);

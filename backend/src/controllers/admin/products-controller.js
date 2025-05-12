@@ -32,7 +32,6 @@ const handleImageUpload = async (req,res)=>{
 // add a new product 
 const addProductController = async (req, res) => {
     try{
-        const {} = req.body;
         const {image,title,description,category,brand,price,salePrice,totalStock} = req.body;
         const newlyCreatedProduct = await Product.create({image,title,description,category,brand,price,salePrice,totalStock});
         if(!newlyCreatedProduct){
@@ -86,8 +85,10 @@ const fetchAllProductsController = async (req, res) => {
 const EditProductController = async (req, res) => {
     try{
         const {id} = req.params;
+        console.log(req.params);
         const {image,title,description,category,brand,price,salePrice,totalStock} = req.body;
-        const findProduct = await Product.findOne({id});
+        console.log(req.body);
+        const findProduct = await Product.findOne({_id : id});
         if(!findProduct){
             return res.status(400).json({
                 success : false,
@@ -114,7 +115,7 @@ const EditProductController = async (req, res) => {
         console.log(err);
         res.status(400).json({
             success : false,
-            message : "Error in add product controller"
+            message : "Error in edit product controller"
         })
     }
 };
@@ -122,15 +123,18 @@ const EditProductController = async (req, res) => {
 //  delete a product
 const deleteProductController = async (req, res) => {
     try{
+        console.log(req.params);
         const {id} = req.params;
-        const findProductToDelete = await Product.findOne({id});
+        console.log('Body payload:', req.body);
+
+        const findProductToDelete = await Product.findOneAndDelete({_id : id});
+        console.log(findProductToDelete);
         if(!findProductToDelete){
             return res.status(400).json({
                 success : false,
                 message : "Product does not exist"
             })
         }
-        await findProductToDelete.remove();
         res.status(201).json({
             success : true,
             message : "Product deleted successfully",

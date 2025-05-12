@@ -1,14 +1,14 @@
 import{ Card} from "../ui/card.jsx";
 import { IndianRupee ,RotateCw } from "lucide-react";
 import { Button } from "../ui/button";
-import { useState,useEffect } from "react";
+import { useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import  CommonForm  from "../common/form.jsx";
 import  ProductImageUpload  from "../../pages/admin-view/image-upload.jsx";
 import { addProductFormElements } from "@/config/index.js";
 import { useDispatch } from "react-redux";
 import { fetchAllProducts } from "@/store/product-slice/index.js";
-import { addNewProduct } from "@/store/product-slice/index.js";
+import { editProduct,deleteProduct } from "@/store/product-slice/index.js";
 import { useToast } from "@/hooks/use-toast.js";
 const initialFormData = {
   image : null,
@@ -18,26 +18,44 @@ const initialFormData = {
   brand: '',
   price : "",
   salePrice : 0,
-  TotalStock : '',
+  totalStock : '',
 }
 function AdminProductTile({product}) {
     const [formData, setFormData] = useState(product);
     const [openEditDialogBox,setOpenEditDialogBox] = useState(false);
     const [imageFile, setImageFile] = useState(null);
-    const [uploadedImageUrl, setUploadedImageUrl] = useState('');
+    const [uploadedImageUrl, setUploadedImageUrl] = useState(product.image);
     const [imageLoadingState, setImageLoadingState] = useState(false);
+    const dispatch = useDispatch();
+    const {toast} = useToast();
     const handleEditProduct = (product) => {
+        setFormData({
+            ...initialFormData,
+            title: product.title,
+            description: product.description,
+            category: product.category,
+            brand: product.brand,
+            price: product.price,
+            salePrice: product.salePrice,
+            totalStock: product.totalStock,
+        });
+        setImageFile(null);                
+        setUploadedImageUrl(product.image); 
+        setImageLoadingState(false);
         setOpenEditDialogBox(true);
+
         console.log(product);
     }
     const handleDeleteProduct = (product) => {
-        console.log(product);
+        dispatch(deleteProduct(product._id));
     }
-    const dispatch = useDispatch();
-    const toast = useToast();
     function onsubmit(event){
         event.preventDefault();
-        dispatch(addNewProduct({...formData,image : uploadedImageUrl}))
+        const payload = {
+            ...formData,
+            image: uploadedImageUrl
+        };
+        dispatch(editProduct({ id: product._id,formData : payload}))
         .then((data)=>{
         console.log(data);
         if(data?.payload?.success){
@@ -46,11 +64,13 @@ function AdminProductTile({product}) {
             setImageFile(null);
             setUploadedImageUrl('');
             toast({
-            title : 'Product added successfully',
+            title : 'Product edited successfully',
             })
         }
         });
     }
+
+
 
     return (  
         <>
@@ -58,7 +78,7 @@ function AdminProductTile({product}) {
                 <div className='w-full flex flex-row gap-6
                     bg-gray-200 border-4 rounded-md p-2
                         shadow-lg '>
-                        <img src={product.image} alt="" className=" md:h-30 h-10" />
+                        <img src={product.image} alt="product image" className=" md:h-30 h-10" />
                         <div className="flex  smd:flex-row flex-col justify-evenly w-full">
                             <div className="flex flex-col">
                                 <p className="text-lg font-semibold">{product.description}</p>
