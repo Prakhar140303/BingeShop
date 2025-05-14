@@ -1,9 +1,98 @@
 import React from 'react'
-
+import { Link, useNavigate } from 'react-router-dom'
+import {House ,Menu, ShoppingCart, CircleUser, LogOut} from 'lucide-react'
+import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet'
+import { Button } from '../ui/button'
+import { useSelector, useDispatch } from 'react-redux'
+import { shoppingViewHeaderMenuItems } from '@/config'
+import {DropdownMenu, DropdownMenuTrigger,
+   DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator} from '@/components/ui/dropdown-menu'
+import { Avatar, AvatarFallback } from '../ui/avatar'
+import { DropdownMenuItem } from '@radix-ui/react-dropdown-menu'
+import { logoutUser } from '@/store/auth-slice' 
+function capitalize(str) {
+  if (!str) return '';
+  return str[0].toUpperCase() + str.slice(1).toLowerCase();
+}
+function MenuItem(){
+  return <nav className='flex flex-col mb-3 lg:mb-0 
+    lg:items-center gap-6 lg:flex-row'>
+      {
+        shoppingViewHeaderMenuItems.map(MenuItem =>(
+          <Link to={MenuItem.path} 
+          key={MenuItem.id} className='text-muted-foreground hover:text-foreground'>{MenuItem.label}</Link>
+        ))
+      }
+  </nav>
+}
+function HeaderRightContent(){
+  const {user} = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  }
+  return <div className='flex lg:items-center lg:flex-row flex-col gap-4'>
+    <Button varient='outline' size='icon'>
+      <ShoppingCart className='size-6'/>
+      <span className='sr-only'>User Cart</span>
+    </Button>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Avatar className='bg-black'>
+          <AvatarFallback className='bg-black
+              text-white font-extrabold'>
+              {user?.username[0].toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent side='right' className='w-56 min-h-20'>
+        <DropdownMenuLabel>Logged in as <strong>{capitalize(user?.username)}</strong></DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className='flex flex-row' onClick={() => navigate('/shop/account')}>
+          <CircleUser  className='mr-2 size-6'/>
+          Account
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className='flex flex-row' onClick={() => handleLogout()}>
+          <LogOut className='mr-2 size-6'/>
+          Logout
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  </div>
+}
 function ShoppingHeader() {
+  const { user} = useSelector((state) => state.auth);
+  console.log("IN header : ",{user});
   return (
-    <div> Shopping View
-    </div>
+    <header className='sticky top-0 z-40 w-full border-b bg-background'>
+      <div className='flex h-16 items-center justify-between px-4 md:px-6'>
+        <Link to='/shop/home' className='flex items-center gap-2'>
+        <House  className='size-10'/>
+        <span className='font-bold'>BingeShop</span>
+        </Link> 
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button varient='outline' size='icon' className='md:hidden'>
+              <Menu />
+              <span className='sr-only'>Toggle header menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side = 'left' className='w-full max-w-xs'>
+            <MenuItem/>
+            <HeaderRightContent/>
+          </SheetContent>
+        </Sheet>
+        <div className='hidden lg:block '> 
+          <MenuItem/>
+        </div>
+
+          <div className='hidden lg:block'>
+            <HeaderRightContent/>
+          </div>
+      </div>
+    </header>
   )
 }
 

@@ -20,6 +20,7 @@ import { useSelector,useDispatch } from 'react-redux'
 import { checkAuth } from './store/auth-slice/index.js'
 import { Skeleton } from './components/ui/skeleton.jsx'
 import {motion} from 'framer-motion'
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 function App() {
   const {isAuthenticated,user,isLoading} = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -29,7 +30,14 @@ function App() {
     dispatch(checkAuth())
   }, [dispatch])
   if (isLoading) {
-    return <Skeleton className='w-[800px] bg-black h-[600px] rounded '/>
+    return  <div  className='flex justify-center items-center w-screen h-screen'>
+      <DotLottieReact
+        src="https://lottie.host/49dfed84-f8da-429e-8178-fb9fbbeed332/oF5DA2DoVS.lottie"
+        loop
+        autoplay
+        className='size-60'
+      />
+    </div>
   }
   return ( 
     <div className='flex flex-col overflow-hidden bg-white'>

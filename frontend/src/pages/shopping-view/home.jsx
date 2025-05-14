@@ -1,8 +1,8 @@
 import React from 'react'
-
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 function ShoppingHome() {
   return (
-    <div>Shopping home</div>
+   <div>Home page</div>
   )
 }
 

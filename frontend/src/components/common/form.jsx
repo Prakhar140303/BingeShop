@@ -8,7 +8,7 @@ import { SelectValue } from '@radix-ui/react-select';
 import {motion} from 'framer-motion'
 
 const MotionButton = motion(Button);
-function CommonForm({formControls, formData, setFormData,onSubmit, buttonText}) {
+function CommonForm({formControls, formData, setFormData,onSubmit, buttonText ,isButtonDisabled}) {
     function renderInputsByComponentType(getControlItem){
         let element = null;
         const value = formData[getControlItem.name] || '';
@@ -80,7 +80,7 @@ function CommonForm({formControls, formData, setFormData,onSubmit, buttonText}) 
                 </div>)
             }
         </div>
-        <MotionButton type='submit' whileHover={{scale:1.05}} className='mt-2 w-full'>{buttonText || 'Submit'}</MotionButton>
+        <MotionButton type='submit' disabled={isButtonDisabled} whileHover={{scale:1.05}} className='mt-2 w-full'>{buttonText || 'Submit'}</MotionButton>
     </form>
   )
 }

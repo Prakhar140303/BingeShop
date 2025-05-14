@@ -8,7 +8,7 @@ import CommonForm from '@/components/common/form'
 import { addProductFormElements } from '@/config'
 import ProductImageUpload from './image-upload'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllProducts , addNewProduct} from '@/store/product-slice'
+import { fetchAllProducts , addNewProduct, deleteProduct} from '@/store/product-slice'
 import { useToast } from '@/hooks/use-toast';
 import  AdminProductTile  from '@/components/admin-view/product-tile.jsx';
 const initialFormData = {
@@ -48,11 +48,21 @@ function AdminProducts() {
       }
     });
   }
+  const handleDeleteProduct = (product) => {
+        dispatch(deleteProduct(product._id));
+        dispatch(fetchAllProducts());
+    }
+   function isFormValid() {
+  return Object.keys(formData)
+    .filter((key) => key !== 'salePrice')
+    .every((key) => formData[key] !== '');
+  }
   useEffect(()=>{
     dispatch(fetchAllProducts());
   },[dispatch]);
   console.log({productList});
   
+
   return (
     <>
     <div  className='flex flex-col gap-4 w-full overflow-scroll'>
@@ -69,7 +79,7 @@ function AdminProducts() {
       <div className='flex flex-col gap-4'>
         {
           productList.map((product) => (
-            <AdminProductTile key={product._id} product={product} />
+            <AdminProductTile key={product._id} product={product} handleDeleteProduct={handleDeleteProduct} />
           ))
         }
 
@@ -92,10 +102,11 @@ function AdminProducts() {
                 onSubmit={onsubmit} 
                 setFormData={setFormData} 
                 formControls={addProductFormElements} 
-                buttonText={'Add'}>
+                buttonText={'Add'}
+                isButtonDisabled={!isFormValid()}>
             </CommonForm>
-
           </div>
+            <Button className='w-full mt-[-10px]' onClick={() => setFormData(initialFormData)}>Reset</Button>
         </SheetContent>
       </Sheet>
     </>

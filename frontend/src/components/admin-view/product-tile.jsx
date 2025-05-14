@@ -7,8 +7,7 @@ import  CommonForm  from "../common/form.jsx";
 import  ProductImageUpload  from "../../pages/admin-view/image-upload.jsx";
 import { addProductFormElements } from "@/config/index.js";
 import { useDispatch } from "react-redux";
-import { fetchAllProducts } from "@/store/product-slice/index.js";
-import { editProduct,deleteProduct } from "@/store/product-slice/index.js";
+import { editProduct, fetchAllProducts } from "@/store/product-slice/index.js";
 import { useToast } from "@/hooks/use-toast.js";
 const initialFormData = {
   image : null,
@@ -20,7 +19,7 @@ const initialFormData = {
   salePrice : 0,
   totalStock : '',
 }
-function AdminProductTile({product}) {
+function AdminProductTile({product, handleDeleteProduct}) {
     const [formData, setFormData] = useState(product);
     const [openEditDialogBox,setOpenEditDialogBox] = useState(false);
     const [imageFile, setImageFile] = useState(null);
@@ -46,9 +45,7 @@ function AdminProductTile({product}) {
 
         console.log(product);
     }
-    const handleDeleteProduct = (product) => {
-        dispatch(deleteProduct(product._id));
-    }
+    
     function onsubmit(event){
         event.preventDefault();
         const payload = {
@@ -70,18 +67,19 @@ function AdminProductTile({product}) {
         });
     }
 
+   
 
 
     return (  
         <>
             <Card >
-                <div className='w-full flex flex-row gap-6
+                <div className='w-full flex smd:flex-row flex-col gap-6
                     bg-gray-200 border-4 rounded-md p-2
-                        shadow-lg '>
-                        <img src={product.image} alt="product image" className=" md:h-30 h-10" />
+                        shadow-lg  items-center'>
+                        <img src={product.image} alt="product image" className=" md:h-30 smd:h-32 size-28 " />
                         <div className="flex  smd:flex-row flex-col justify-evenly w-full">
                             <div className="flex flex-col">
-                                <p className="text-lg font-semibold">{product.description}</p>
+                                <p className="text-lg font-semibold hidden smd:block">{product.description}</p>
                                 <p><strong>Category : </strong>{product.category}</p>
                                 <p> <strong>Quantity : </strong>{product.totalStock}</p>
                             </div>
@@ -92,10 +90,13 @@ function AdminProductTile({product}) {
                                     <div className="flex flex-row w-full justify-center items-center">
                                         {
                                             product.salePrice>0 ?
-                                            <p className="text-xl">{product.salePrice} </p>: <div></div> 
+                                            <>
+                                                <p className="text-xl">{product.salePrice} </p>
+                                                <IndianRupee className="h-4"/>
+                                            </>
+                                                : <div></div> 
                                         }
                                         
-                                        <IndianRupee className="h-4"/>
                                     </div>
                                 </div>
                             </div>
@@ -110,7 +111,7 @@ function AdminProductTile({product}) {
             <Sheet open={openEditDialogBox} onOpenChange={()=>setOpenEditDialogBox(false)}>
             <SheetContent side="right" className='overflow-auto'>
             <SheetHeader className='mb-4'>
-                <SheetTitle     >Add New Product</SheetTitle>
+                <SheetTitle     >Edit  Product</SheetTitle>
             </SheetHeader>
             <ProductImageUpload imageFile={imageFile} 
                 setFile={setImageFile} 
@@ -124,7 +125,10 @@ function AdminProductTile({product}) {
                     onSubmit={onsubmit} 
                     setFormData={setFormData} 
                     formControls={addProductFormElements} 
-                    buttonText={'Save'}>
+                    buttonText={'Save'}
+    
+                    >
+                    
                 </CommonForm>
 
             </div>
