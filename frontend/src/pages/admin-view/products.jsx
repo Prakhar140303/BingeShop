@@ -73,7 +73,7 @@ function AdminProducts() {
             onClick={() => setOpenCreateProductsDialog(true)}>
               Add New Product
                 <Plus />
-            </Button>
+            </Button> 
         </motion.div>
       </div>
       <div className='flex flex-col gap-4'>

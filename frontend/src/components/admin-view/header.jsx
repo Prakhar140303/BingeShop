@@ -12,7 +12,7 @@ function AdminHeader({open,setOpen}) {
     dispatch(logoutUser());
   }
   return (
-    <header className='flex  items-center  justify-between px-4 py-3   bg-background border-b'>
+    <header className='flex  items-center  w-full  justify-between px-4 py-3   bg-background border-b'>
       <Button onClick={() => setOpen(!open)} className="lg:hidden sm:block">
       <AlignJustify />
       <span className='sr-only'>Toggle Menu</span>

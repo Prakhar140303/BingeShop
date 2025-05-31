@@ -54,6 +54,36 @@ const addProductController = async (req, res) => {
         })
     }
 };
+const addAllProductController = async (req, res) => {
+    try{
+        const {products}  = req.body;
+        console.log({products});
+        const createdProducts = [];
+        for(const currentProductIndex in products ){
+            const {image,title,description,category,brand,price,salePrice,totalStock} = products[currentProductIndex];
+            const newlyCreatedProduct = await Product.create({image,title,description,category,brand,price,salePrice,totalStock});
+            console.log(products[currentProductIndex])
+            if(!newlyCreatedProduct){
+                res.status(400).json({
+                    success : false,
+                    message : "Error in creating product"
+                })
+            }
+            createdProducts.push(newlyCreatedProduct);
+        };
+        res.status(201).json({
+            success : true,
+            message : "Product created successfully",
+            data : createdProducts
+        })
+    }catch(err){
+        console.log(err);
+        res.status(400).json({
+            success : false,
+            message : "Error in add product controller"
+        })
+    }
+};
 
 // fetch all products 
 const fetchAllProductsController = async (req, res) => {
@@ -152,4 +182,4 @@ export {handleImageUpload,
      addProductController,
       fetchAllProductsController,
        EditProductController,
-        deleteProductController};
+        deleteProductController, addAllProductController};

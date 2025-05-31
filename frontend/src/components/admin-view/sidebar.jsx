@@ -46,7 +46,7 @@ function AdminSideBar({open,setOpen}) {
   const navigate = useNavigate();
   
   return (
-    <>
+    <div className=''>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side='left' className='w-64'>
           <div className='flex flex-col h-full'>
@@ -63,7 +63,7 @@ function AdminSideBar({open,setOpen}) {
           </div>
         </SheetContent>
       </Sheet>
-       <aside className='hidden w-64 flex-col border-r bg-background p-6 lg:flex'>
+       <aside className='hidden fixed inset-y-0 left-0 w-64 flex-col border-r bg-gray-300 p-6 lg:flex'>
         <div onClick = {() => navigate('/admin/dashboard')} className='flex cursor-pointer items-center gap-2'>
             <ChartBarDecreasing />
             <h1 className='text-xl   font-extrabold '>
@@ -72,7 +72,7 @@ function AdminSideBar({open,setOpen}) {
         </div>
         <MenuItems  setOpen={setOpen}/>
        </aside> 
-    </>
+    </div>
 
   )
 }

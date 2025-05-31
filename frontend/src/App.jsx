@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route,Navigate } from 'react-router-dom'
 import AuthLayout from './components/auth/Layout.jsx'
 import AuthLogin from './pages/auth/login.jsx'
 import AuthRegister from './pages/auth/register.jsx'
@@ -18,8 +18,6 @@ import CheckAuth from './components/common/check-auth.jsx'
 import UnauthPage from './pages/unauth-page/index.jsx'
 import { useSelector,useDispatch } from 'react-redux'
 import { checkAuth } from './store/auth-slice/index.js'
-import { Skeleton } from './components/ui/skeleton.jsx'
-import {motion} from 'framer-motion'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 function App() {
   const {isAuthenticated,user,isLoading} = useSelector((state) => state.auth);
@@ -42,6 +40,7 @@ function App() {
   return ( 
     <div className='flex flex-col overflow-hidden bg-white'>
       <Routes>
+        <Route path="/" element={<Navigate to="/auth/login" replace />} />
         <Route path='/auth' element={<CheckAuth isAuthenticated={isAuthenticated} user={user}>
           <AuthLayout/>
         </CheckAuth>}>

@@ -59,7 +59,10 @@ export const LoginController = async (req, res) => {
                 message : "Invalid password"});
         }
         const token = jwt.sign({
-            id : user._id , role : user.role, email : user.email
+            id : user._id ,
+            role : user.role,
+            email : user.email,
+            username : user.username
         },process.env.CLIENT_SECRET_KEY,{
             expiresIn : '60m'
         });
@@ -67,6 +70,7 @@ export const LoginController = async (req, res) => {
             success : true,
             message : 'User Logged In sucessfully',
             user : {
+                username : user.username,
                 email : user.email,
                 role : user.role,
                 id : user._id
@@ -85,6 +89,7 @@ export const LoginController = async (req, res) => {
 // logout
 
 export const LogoutController  = (req, res) => {
+    console.log('logout');
     res.clearCookie('token').json({
         success : true,
         message : "User logged out successfully"});

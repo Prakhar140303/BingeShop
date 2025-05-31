@@ -66,7 +66,12 @@ function AdminProductTile({product, handleDeleteProduct}) {
         }
         });
     }
-
+    function truncate(str, maxLength = 50) {
+        if (typeof str !== "string") return str;
+        return str.length > maxLength
+            ? str.slice(0, maxLength) + "..."
+            : str;
+    }
    
 
 
@@ -76,10 +81,10 @@ function AdminProductTile({product, handleDeleteProduct}) {
                 <div className='w-full flex smd:flex-row flex-col gap-6
                     bg-gray-200 border-4 rounded-md p-2
                         shadow-lg  items-center'>
-                        <img src={product.image} alt="product image" className=" md:h-30 smd:h-32 size-28 " />
+                        <img src={product.image} alt="product image" className=" md:h-30 smd:h-32 size-28 rounded-md shadow-xl " />
                         <div className="flex  smd:flex-row flex-col justify-evenly w-full">
                             <div className="flex flex-col">
-                                <p className="text-lg font-semibold hidden smd:block">{product.description}</p>
+                                <p className="text-lg font-semibold hidden smd:block">{truncate(product.description)}</p>
                                 <p><strong>Category : </strong>{product.category}</p>
                                 <p> <strong>Quantity : </strong>{product.totalStock}</p>
                             </div>
