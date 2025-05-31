@@ -37,6 +37,7 @@ function App() {
       />
     </div>
   }
+  console.log('import.meta.env.MODE : ',import.meta.env.MODE);
   return ( 
     <div className='flex flex-col overflow-hidden bg-white'>
       <Routes>
