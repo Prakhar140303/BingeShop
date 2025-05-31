@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import axios from "axios";
+import axiosInstance from "@/lib/axiosInstance";
 const initialState = {
     isAuthenticated: false,
     isLoading : true,
@@ -8,7 +8,7 @@ const initialState = {
 };
 export const registerUser = createAsyncThunk('/auth/register', async (formData, { rejectWithValue }) => {
     try {
-        const response = await axios.post('http://localhost:5000/api/auth/signup', formData, { withCredentials: true });
+        const response = await axiosInstance.post(`/auth/signup`, formData, { withCredentials: true });
         return response.data;  
     } catch (error) {
         if (error.response) {
@@ -20,7 +20,7 @@ export const registerUser = createAsyncThunk('/auth/register', async (formData, 
 });
 export const loginUser = createAsyncThunk('/auth/login', async (formData, { rejectWithValue }) => {
     try {
-        const response = await axios.post('http://localhost:5000/api/auth/login', formData, { withCredentials: true });
+        const response = await axiosInstance.post('/auth/login', formData, { withCredentials: true });
         return response.data;  
     } catch (error) {
         if (error.response) {
@@ -33,7 +33,7 @@ export const loginUser = createAsyncThunk('/auth/login', async (formData, { reje
 export const logoutUser = createAsyncThunk('/auth/logout', async (_,{rejectWithValue }) => {
     try {
         console.log('reached thunk');
-        const response = await axios.post('http://localhost:5000/api/auth/logout', {},{ withCredentials: true });
+        const response = await axiosInstance.post('/auth/logout', {},{ withCredentials: true });
         return response.data;  
     } catch (error) {
         if (error.response) {
@@ -44,7 +44,7 @@ export const logoutUser = createAsyncThunk('/auth/logout', async (_,{rejectWithV
     }
 });
 export const checkAuth = createAsyncThunk('/auth/checkAuth', async () => {
-        const response = await axios.get('http://localhost:5000/api/auth/check-auth',
+        const response = await axiosInstance.get('/auth/check-auth',
             { withCredentials: true, 
                 headers: {
                     'Cache-Control': 'no-cache, no-store, must-revalidate, proxy-revalidate'
