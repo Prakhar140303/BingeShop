@@ -1,7 +1,7 @@
 import React from 'react'
-import { Card, CardContent } from '../ui/card'
+import { Card, CardContent, CardFooter } from '../ui/card'
 import { Badge } from '../ui/badge'
-
+import { Button } from '../ui/button'
 export default function ShoppingProductTile({product}) {
   return (
     <Card className='p-4'>
@@ -26,6 +26,9 @@ export default function ShoppingProductTile({product}) {
                     {product.salePrice > 0 && <span className='text-lg font-semibold'>{product.salePrice}</span>}
                 </div>
             </CardContent>
+            <CardFooter >
+                <Button className='w-full'>Add to Cart</Button>
+            </CardFooter>
         </div>
     </Card>
 

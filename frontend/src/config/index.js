@@ -19,6 +19,14 @@ export const registerFormControls =[
         componentType : 'input',
         type : 'password'
     },
+    {
+      name :'role',
+      label :'Admin',
+
+      componentType : 'checkbox',
+      checkBoxLabel : 'Make this user an admin',
+      type : 'admin'
+    }
 ]
 export const LoginFormControls =[
     {

@@ -57,6 +57,25 @@ function CommonForm({formControls, formData, setFormData,onSubmit, buttonText ,i
                     />
                 );
                 break;
+            case 'checkbox':
+                element = (
+                    <div className="flex flex-row items-center space-x-2">
+                        <Input
+                            type="checkbox"
+                            id={getControlItem.name}
+                            name={getControlItem.name}
+                            checked={value}
+                            onChange={(event) =>
+                            setFormData({
+                                ...formData,
+                                [getControlItem.name]: event.target.checked ? getControlItem.type : '',
+                            })
+                            }
+                        />
+                        <Label htmlFor={getControlItem.name}>{getControlItem.checkboxLabel}</Label>
+                    </div>
+                );
+                break;
             default:
                 element =( <Input 
                     name={getControlItem.name}
@@ -72,7 +91,13 @@ function CommonForm({formControls, formData, setFormData,onSubmit, buttonText ,i
     <form onSubmit={onSubmit}>
         <div className='flex flex-col gap-3'>
             {
-                formControls.map(controlItem => <div className='grid w-full gap-1.5' key={controlItem.name}>
+                formControls.map(controlItem =>controlItem.componentType !=='checkbox'? <div className='grid w-full gap-1.5' key={controlItem.name}>
+                    <Label className="mb-1">{controlItem.label}</Label>
+                    {
+                        renderInputsByComponentType(controlItem)
+                    }
+                </div> : 
+                <div key ='controlItem.name' className='flex flex-row items-center gap-2'>
                     <Label className="mb-1">{controlItem.label}</Label>
                     {
                         renderInputsByComponentType(controlItem)
