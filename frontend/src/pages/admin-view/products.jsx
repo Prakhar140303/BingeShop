@@ -8,7 +8,7 @@ import CommonForm from '@/components/common/form'
 import { addProductFormElements } from '@/config'
 import ProductImageUpload from './image-upload'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllProducts , addNewProduct, deleteProduct} from '@/store/product-slice'
+import { fetchAllProducts , addNewProduct, deleteProduct} from '@/store/admin/product-slice'
 import { useToast } from '@/hooks/use-toast';
 import  AdminProductTile  from '@/components/admin-view/product-tile.jsx';
 const initialFormData = {

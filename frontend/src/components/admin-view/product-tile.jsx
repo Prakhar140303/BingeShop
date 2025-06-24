@@ -7,7 +7,7 @@ import  CommonForm  from "../common/form.jsx";
 import  ProductImageUpload  from "../../pages/admin-view/image-upload.jsx";
 import { addProductFormElements } from "@/config/index.js";
 import { useDispatch } from "react-redux";
-import { editProduct, fetchAllProducts } from "@/store/product-slice/index.js";
+import { editProduct, fetchAllProducts } from "@/store/admin/product-slice/index.js";
 import { useToast } from "@/hooks/use-toast.js";
 const initialFormData = {
   image : null,
@@ -82,11 +82,11 @@ function AdminProductTile({product, handleDeleteProduct}) {
                     bg-gray-200 border-4 rounded-md p-2
                         shadow-lg  items-center'>
                         <img src={product.image} alt="product image" className=" md:h-30 smd:h-32 size-28 rounded-md shadow-xl " />
-                        <div className="flex  smd:flex-row flex-col justify-evenly w-full">
-                            <div className="flex flex-col">
-                                <p className="text-lg font-semibold hidden smd:block">{truncate(product.description)}</p>
-                                <p><strong>Category : </strong>{product.category}</p>
-                                <p> <strong>Quantity : </strong>{product.totalStock}</p>
+                        <div className="flex  smd:flex-row flex-col  justify-between w-full">
+                            <div className="flex flex-col gap-3">
+                                <p className="md:text-lg text-md font-semibold hidden smd:block">{truncate(product.description)}</p>
+                                <p ><strong>Category :   </strong>{product.category}</p>
+                                <p> <strong>Quantity :   </strong>{product.totalStock}</p>
                             </div>
                             <div>
                                 <h2 className="text-2xl font-bold  ">{product.title}</h2>

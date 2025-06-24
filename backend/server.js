@@ -4,8 +4,11 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import authRoutes from "./src/routes/auth-routes.js";
-import adminProductRoutes from "./src/routes/products-routes.js";
+import authRoutes from "./src/routes/auth/auth-routes.js";
+import adminProductRoutes from "./src/routes/admin/products-routes.js";
+import shopProductRoutes from "./src/routes/shop/products-routes.js";   
+
+
 import path from 'path'
 
 const app = express();
@@ -32,6 +35,7 @@ app.use(cookieParser());
 const PORT = process.env.PORT || 5000;
 app.use("/api/auth", authRoutes);
 app.use("/api/admin/products", adminProductRoutes);
+app.use("/api/shop/products", shopProductRoutes);
 
 
 const __dirname = path.resolve();

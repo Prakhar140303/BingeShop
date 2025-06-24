@@ -1,22 +1,55 @@
 import ProductFilter from '@/components/shopping-view/productFilter'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
    DropdownMenuRadioGroup, DropdownMenuRadioItem} from '@/components/ui/dropdown-menu'
-import React,{useEffect} from 'react'
+import React,{useState, useEffect} from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowDownUp } from 'lucide-react'
 import { sortOptions } from '@/config'
-import { useDispatch, useSelector } from 'react-redux'
+import { fetchAllFitteredProducts } from '@/store/shop/product-slice'
 import ShoppingProductTile from '@/components/shopping-view/product-tile'
-import { fetchAllProducts } from '@/store/product-slice'
+import { useDispatch, useSelector } from 'react-redux'
  function  ShoppingListing() {
-  const {productList} = useSelector((state) => state.product);  
+  const {FilteredProductList} = useSelector((state) => state.shopProduct);  
+  const [filters,setFilters] = useState({});
+  const [sort,setSort] = useState(null);  
+
+  const handleSort = (value) => {
+    console.log({value});
+    setSort(value);
+    
+  }
+  const handleFitler = (getSectionId,getCurrentOption) => {
+    console.log({getSectionId,getCurrentOption});  
+    let copyFilters = {...filters};
+    const indexoFCurrentSection = Object.keys(copyFilters).indexOf(getSectionId);
+    if(indexoFCurrentSection === -1){
+      copyFilters ={
+        ...copyFilters,
+        [getSectionId] : [getCurrentOption] 
+      }
+    }else{
+      const indexOfCurrentOption = copyFilters[getSectionId].indexOf(getCurrentOption);
+      if(indexOfCurrentOption === -1){
+        copyFilters[getSectionId].push(getCurrentOption);
+      }else{
+        copyFilters[getSectionId].splice(getCurrentOption,1 );
+      }
+    }
+    setFilters(copyFilters);
+    sessionStorage.setItem('filters',JSON.stringify(copyFilters));
+    console.log(copyFilters);
+  }
+  useEffect(()=>{
+    setSort('price-lowtoHigh');
+    setFilters(JSON.parse(sessionStorage.getItem('filters')) || {});
+  },[])
   const dispatch = useDispatch();
   useEffect(()=>{
-    dispatch(fetchAllProducts());
+    dispatch(fetchAllFitteredProducts());
   },[dispatch])
   return (
     <div className='grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 md:p-6'>
-      <ProductFilter/>
+      <ProductFilter filters= {filters} handleFilter={handleFitler}/>
       <div className='bg-background w-full rounded-lg  shadow-sm'> 
         <div className='p-4 border-b flex items-center justify-between'>
           <h2 className='text-lg font-extrabold'>
@@ -24,20 +57,20 @@ import { fetchAllProducts } from '@/store/product-slice'
           </h2>
           <div className='flex items-center gap-3'>
             <span className='text-muted-foreground mr-2'>
-              10 products
+              {FilteredProductList.length} products
             </span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button varient='outline' size='sm' className='flex items-center gap-1'>
+                <Button variant='outline' size='sm' className='flex items-center gap-1'>
                   <ArrowDownUp  className=''/>
                   <span>Sort By</span>
                   </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align='end' className='w-[200px]'>
-                <DropdownMenuRadioGroup>
+                <DropdownMenuRadioGroup value={sort} onValueChange={handleSort}>
                  {
                   sortOptions.map(sortItem => 
-                  <DropdownMenuRadioItem key={sortItem.id}>
+                  <DropdownMenuRadioItem key={sortItem.id} value={sortItem.id}>
                       {sortItem.label}
                   </DropdownMenuRadioItem>  )
                  }
@@ -48,7 +81,7 @@ import { fetchAllProducts } from '@/store/product-slice'
         </div>
         <div className='grid grid-cols-1 gap-2 my-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
           {
-            productList.map((product) => (
+            FilteredProductList.map((product) => (
               <ShoppingProductTile key={product._id} product={product} />
             ))
           }
