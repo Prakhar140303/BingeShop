@@ -3,19 +3,44 @@ import Product from "../../models/product-model.js";
 
 
 const getFitleredProducts = async (req, res) => {
-    try{
-        const products = await Product.find({});    
-        res.status(200).json({
-            success : true,
-            message : "Products fetched successfully",
-            data : products
-        });
-    }catch(err){
-        console.log(err);
-        res.status(500).json({
-            success : false,
-            message : "Something went wrong"});
-    }
+  const {filters, SortType,page,limit} = req.body;
+  console.log(req.body);
+
+  const query = {};
+  let sortQuery = {};
+    const skip = (page - 1) * limit;
+
+  if (SortType === 1) {
+    sortQuery.price = 1; // Ascending
+  } else if (SortType ===2) {
+    sortQuery.price = -1; // Descending
+  } else if (SortType === 3) {
+    sortQuery.title = 1;
+  } else if (SortType === 4) {
+    sortQuery.title = -1;
+  }
+
+  if (filters.Brand && filters.Brand.length > 0) {
+    query.brand = { $in: filters.Brand };
+  }
+
+  if (filters.Category && filters.Category.length > 0) {
+    query.category = { $in: filters.Category };
+  }
+
+  try {
+    const total = await Product.countDocuments(query)
+    const products = await Product.find(query).sort(sortQuery).skip(skip).limit(limit);;
+    res.status(200).json({
+      success: true,
+      message: 'Filtered products fetched successfully',
+      totalPages: Math.ceil(total / limit),
+      data: products
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
 }
 
 

@@ -8,16 +8,34 @@ import { sortOptions } from '@/config'
 import { fetchAllFitteredProducts } from '@/store/shop/product-slice'
 import ShoppingProductTile from '@/components/shopping-view/product-tile'
 import { useDispatch, useSelector } from 'react-redux'
- function  ShoppingListing() {
-  const {FilteredProductList} = useSelector((state) => state.shopProduct);  
+import { useSearchParams,useNavigate } from 'react-router-dom'
+const FilterMap ={
+  "price-lowtohigh" :1,
+  "price-hightolow" :2,
+  "title-atoz" :3,
+  "title-ztoa" :4,
+}
+console.log(FilterMap["price-lowtohigh"]);
+
+function  ShoppingListing() {
+  // importing the elements from the hooks
   const [filters,setFilters] = useState({});
   const [sort,setSort] = useState(null);  
+  const [searchParams,setSearchParams] = useSearchParams();
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
+  const dispatch = useDispatch();
+  
+  const {FilteredProductList,totalPages} = useSelector((state) => state.shopProduct);  
 
+
+  // functions used in the code :
   const handleSort = (value) => {
     console.log({value});
     setSort(value);
     
   }
+
   const handleFitler = (getSectionId,getCurrentOption) => {
     console.log({getSectionId,getCurrentOption});  
     let copyFilters = {...filters};
@@ -32,7 +50,7 @@ import { useDispatch, useSelector } from 'react-redux'
       if(indexOfCurrentOption === -1){
         copyFilters[getSectionId].push(getCurrentOption);
       }else{
-        copyFilters[getSectionId].splice(getCurrentOption,1 );
+        copyFilters[getSectionId].splice(indexOfCurrentOption,1 );
       }
     }
     setFilters(copyFilters);
@@ -43,10 +61,16 @@ import { useDispatch, useSelector } from 'react-redux'
     setSort('price-lowtoHigh');
     setFilters(JSON.parse(sessionStorage.getItem('filters')) || {});
   },[])
-  const dispatch = useDispatch();
+  const SortType = FilterMap[sort];
+  const goToPage = (newPage) => {
+    searchParams.set('page', newPage)
+    setSearchParams(searchParams);
+  };
+
   useEffect(()=>{
-    dispatch(fetchAllFitteredProducts());
-  },[dispatch])
+    dispatch(fetchAllFitteredProducts({filters,SortType,page,limit}));
+    
+  },[dispatch,filters,SortType,page,limit]);
   return (
     <div className='grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 md:p-6'>
       <ProductFilter filters= {filters} handleFilter={handleFitler}/>
@@ -85,6 +109,14 @@ import { useDispatch, useSelector } from 'react-redux'
               <ShoppingProductTile key={product._id} product={product} />
             ))
           }
+        </div>
+        <div className='flex items-center justify-center gap-4 py-4'>
+          <Button onClick={() => goToPage(page - 1)} disabled={page === 1}>
+          Prev
+        </Button>
+        <span>Page {page}</span>
+        <Button onClick={() => goToPage(page + 1) } disabled={page === totalPages}>Next</Button>
+
         </div>
       </div>
     </div>
