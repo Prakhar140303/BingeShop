@@ -8,7 +8,7 @@ import { sortOptions } from '@/config'
 import { fetchAllFitteredProducts } from '@/store/shop/product-slice'
 import ShoppingProductTile from '@/components/shopping-view/product-tile'
 import { useDispatch, useSelector } from 'react-redux'
-import { useSearchParams,useNavigate } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 const FilterMap ={
   "price-lowtohigh" :1,
   "price-hightolow" :2,
