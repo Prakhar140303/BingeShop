@@ -53,8 +53,17 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
-  		}
+  			},
+		},
+		keyframes :{
+			 float: {
+				'0%, 100%': { transform: 'translateY(0)' },
+				'50%': { transform: 'translateY(-25px)' },
+			},
+		},
+		animation:{
+			float: 'float 3s ease-in-out infinite'
+		}
   	}
   },
   plugins: [animate],
