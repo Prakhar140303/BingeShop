@@ -5,10 +5,15 @@ import axiosInstance from '@/lib/axiosInstance';
 const initialState = {
     isProductLoading : false,
     FilteredProductList : [],
+    allProduct :[],
     totalPages :0
 }
-export const fetchAllFitteredProducts = createAsyncThunk('/product/fetchAllProducts', async ({filters,SortType,page,limit}) => {
+export const fetchAllFitteredProducts = createAsyncThunk('/product/fetchAllFilteredProducts', async ({filters,SortType,page,limit}) => {
     const result = await axiosInstance.post('/shop/products/get',{filters,SortType,page,limit});
+    return result?.data;
+})
+export const fetchAllProduct = createAsyncThunk('/product/fetchAllProducts', async () => {
+    const result = await axiosInstance.get('/shop/products/get');
     return result?.data;
 })
 
@@ -28,6 +33,15 @@ const shopProductSlice = createSlice({
             state.isLoading = false;
             state.FilteredProductList = [];
             state.totalPages = 0
+        })
+        .addCase(fetchAllProduct.pending,(state) => {
+            state.isLoading = true;
+        }).addCase(fetchAllProduct.fulfilled,(state,action) => {
+            state.isLoading = false;
+            state.allProduct = action.payload.data;
+        }).addCase(fetchAllProduct.rejected,(state) => {
+            state.isLoading = false;
+            state.allProduct = [];
         })
     }
 })

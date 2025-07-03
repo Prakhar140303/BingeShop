@@ -3,8 +3,10 @@ import Product from "../../models/product-model.js";
 
 
 const getFitleredProducts = async (req, res) => {
-  const {filters, SortType,page,limit} = req.body;
+  const {filters ={}, SortType,page,limit} = req.body;
   console.log(req.body);
+  console.log("req Body : ",req.body);
+  
 
   const query = {};
   let sortQuery = {};
@@ -42,8 +44,30 @@ const getFitleredProducts = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 }
+const  getProduct = async (req, res) => {
+    try{
+        const findProduct = await Product.find().limit(10);
+        if(!findProduct){
+            return res.status(400).json({
+                success : false,
+                message : "Product does not exist"
+            })
+        }
+        res.status(200).json({
+            success : true,
+            message : "Product fetched successfully",
+            data : findProduct
+        })
+    }catch(err){
+        console.log(err);
+        res.status(400).json({
+            success : false,
+            message : "Error in add product controller"
+        })
+    }
+};
 
 
 
 
-export {getFitleredProducts};
+export {getFitleredProducts,getProduct};

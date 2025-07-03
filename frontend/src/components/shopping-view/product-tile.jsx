@@ -14,7 +14,7 @@ export default function ShoppingProductTile({product}) {
 
   return (
     <Card className='p-4'>
-        <div className='flex flex-col justify-between min-h-[400px] shadow-xl'>
+        <div className='flex flex-col justify-between min-h-[300px] min-w-[200px] shadow-xl'>
             <div className='relative'>
                 <img src={product.image} alt={product.title} className='w-full h-[175px] object-cover rounded-t-lg' />
                 {

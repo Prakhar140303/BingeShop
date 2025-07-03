@@ -80,7 +80,7 @@ function AdminProductTile({product, handleDeleteProduct}) {
             <Card >
                 <div className='w-full flex smd:flex-row flex-col gap-6
                     bg-gray-200 border-4 rounded-md p-2
-                        shadow-lg  items-center'>
+                        shadow-lg  items-center max-h-[180px]'>
                         <img src={product.image} alt="product image" className=" md:h-30 smd:h-32 size-28 rounded-md shadow-xl " />
                         <div className="flex  smd:flex-row flex-col  justify-between w-full">
                             <div className="flex flex-col gap-3">
