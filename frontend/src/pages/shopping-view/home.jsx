@@ -14,7 +14,8 @@ function ShoppingHome() {
     "https://cdn.brandfetch.io/puma.com/w/512/h/254/logo?c=1id83BrBUv9aNb1zf02",
     "https://cdn.brandfetch.io/adidas.com/w/512/h/302/logo?c=1id83BrBUv9aNb1zf02",
     "https://cdn.brandfetch.io/hm.com/w/512/h/338/logo?c=1id83BrBUv9aNb1zf02",
-    "https://cdn.brandfetch.io/zara.com/w/512/h/213/logo?c=1id83BrBUv9aNb1zf02"
+    "https://cdn.brandfetch.io/zara.com/w/512/h/213/logo?c=1id83BrBUv9aNb1zf02",
+    "https://cdn.brandfetch.io/levi.com/w/400/h/400?c=1id83BrBUv9aNb1zf02"
   ];
 
   const repeatedLogos = [...brandLogos, ...brandLogos]; // duplicate for seamless loop
