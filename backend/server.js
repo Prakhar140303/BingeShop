@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./src/routes/auth/auth-routes.js";
 import adminProductRoutes from "./src/routes/admin/products-routes.js";
 import shopProductRoutes from "./src/routes/shop/products-routes.js";   
-
+import cartRoutes from "./src/routes/shop/cart-routes.js"
 
 import path from 'path'
 
@@ -36,6 +36,7 @@ const PORT = process.env.PORT || 5000;
 app.use("/api/auth", authRoutes);
 app.use("/api/admin/products", adminProductRoutes);
 app.use("/api/shop/products", shopProductRoutes);
+app.use("/api/shop/products/cart", cartRoutes);
 
 
 const __dirname = path.resolve();
