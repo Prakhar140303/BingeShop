@@ -88,7 +88,7 @@ const deleteCartProduct  = async (req,res) =>{
                 await cartProductFound.save();
                 return res.status(200).json({
                 success: true,
-                message : "Product deleted successfully",
+                message : "Product deleted successfully!",
                 data : cartProductFound
             })
             }else{
