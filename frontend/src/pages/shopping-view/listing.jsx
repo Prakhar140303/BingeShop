@@ -5,7 +5,7 @@ import React,{useState, useEffect} from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowDownUp } from 'lucide-react'
 import { sortOptions } from '@/config'
-import { fetchAllFitteredProducts } from '@/store/shop/product-slice'
+import { fetchAllFitteredProducts,fetchCartProduct } from '@/store/shop/product-slice'
 import ShoppingProductTile from '@/components/shopping-view/product-tile'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
@@ -26,8 +26,11 @@ function  ShoppingListing() {
   const limit = parseInt(searchParams.get('limit')) || 10;
   const dispatch = useDispatch();
   
-  const {FilteredProductList,totalPages} = useSelector((state) => state.shopProduct);  
-
+  const {FilteredProductList,totalPages, cartProduct} = useSelector((state) => state.shopProduct);  
+  const {user} = useSelector((state)=> state.auth);
+  const cartMap = new Map(cartProduct.map(item =>[item.productId,item]));
+  console.log({cartProduct});
+  console.log(user.id);
 
   // functions used in the code :
   const handleSort = (value) => {
@@ -66,6 +69,16 @@ function  ShoppingListing() {
     searchParams.set('page', newPage)
     setSearchParams(searchParams);
   };
+
+
+
+  useEffect(()=>{
+    if(user?.id){
+      dispatch(fetchCartProduct({userId : user.id}));
+    }
+  },[dispatch,user?.id])
+
+
 
   useEffect(()=>{
     dispatch(fetchAllFitteredProducts({filters,SortType,page,limit}));
@@ -106,7 +119,7 @@ function  ShoppingListing() {
         <div className='grid grid-cols-1 gap-2 my-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
           {
             FilteredProductList.map((product) => (
-              <ShoppingProductTile key={product._id} product={product} />
+              <ShoppingProductTile key={product._id} product={product} cartMap ={cartMap}/>
             ))
           }
         </div>

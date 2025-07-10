@@ -1,8 +1,9 @@
 import express from 'express'
-import { getCartProduct, addCartProduct } from '../../controllers/shop/cart-contoller.js';
+import { getCartProduct, addCartProduct, deleteCartProduct } from '../../controllers/shop/cart-contoller.js';
 const router  =express.Router();
 
-router.get('/get',getCartProduct);
+router.get(`/get/:userId`,getCartProduct);
 router.post('/add',addCartProduct);
+router.delete('/delete/:productId',deleteCartProduct)
 
 export default router

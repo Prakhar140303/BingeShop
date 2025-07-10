@@ -79,11 +79,11 @@ function ShoppingHome() {
           ))}
         </motion.div>
       </div>
-          <div className='flex flex-row gap-8 justify-around bg-[#E1D9EA] my-2 overflow-x-auto rounded-lg'>
+          <div className='flex flex-row gap-4 justify-around bg-[#E1D9EA] my-2 overflow-x-auto rounded-lg'>
             {
               allProduct.filter(product => product.salePrice >0).map((product) => (
                 <div className=' w-[300px] py-12'>
-                  <ShoppingProductTile key={product._id} product={product} />
+                  <ShoppingProductTile key={product._id} product={product} isHome ={true} />
                 </div>
               ))
             }

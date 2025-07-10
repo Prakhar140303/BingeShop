@@ -4,7 +4,8 @@ import Cart from '../../models/cart-model.js'
 const getCartProduct =  async (req,res)=>{
     
     try{
-        const {userId} = req.query;
+        const {userId} = req.params;
+        console.log({userId});
         const allProduct =await Cart.find({userId });
         return res.status(200).json({
             success: true,
@@ -80,7 +81,7 @@ const addCartProduct = async (req,res)=>{
 }
 const deleteCartProduct  = async (req,res) =>{
     try{
-        const {cartProductId} = req.body;
+        const {cartProductId} = req.params;
         const cartProductFound =await Cart.findById(cartProductId);
         if(cartProductFound){
             if(cartProductFound.quantity> 1){
@@ -117,4 +118,4 @@ const deleteCartProduct  = async (req,res) =>{
     }
 }
 
-export {getCartProduct,addCartProduct}
+export {getCartProduct,addCartProduct,deleteCartProduct}
