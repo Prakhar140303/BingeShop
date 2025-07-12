@@ -82,6 +82,7 @@ const addCartProduct = async (req,res)=>{
 const deleteCartProduct  = async (req,res) =>{
     try{
         const {cartProductId} = req.params;
+        console.log(cartProductId)
         const cartProductFound =await Cart.findById(cartProductId);
         if(cartProductFound){
             if(cartProductFound.quantity> 1){

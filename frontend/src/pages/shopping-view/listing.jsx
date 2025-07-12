@@ -1,7 +1,7 @@
 import ProductFilter from '@/components/shopping-view/productFilter'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
    DropdownMenuRadioGroup, DropdownMenuRadioItem} from '@/components/ui/dropdown-menu'
-import React,{useState, useEffect} from 'react'
+import React,{useState, useEffect, useMemo} from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowDownUp } from 'lucide-react'
 import { sortOptions } from '@/config'
@@ -28,7 +28,9 @@ function  ShoppingListing() {
   
   const {FilteredProductList,totalPages, cartProduct} = useSelector((state) => state.shopProduct);  
   const {user} = useSelector((state)=> state.auth);
-  const cartMap = new Map(cartProduct.map(item =>[item.productId,item]));
+  const cartMap =useMemo(()=>{  
+    return new Map(cartProduct.map(item =>[item.productId,item]));
+  },[cartProduct]);
   console.log({cartProduct});
   console.log(user.id);
 

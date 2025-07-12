@@ -40,16 +40,21 @@ export default function ShoppingProductTile({product, isHome = false,cartMap =ne
                 </CardContent>
                 <CardFooter >
                     { !isHome && (!cartProduct ?
-                        <Button className='w-full' onClick={()=> dispatch(addCartProduct({productId : product._id,userId :user.id}),fetchCartProduct())} >
+                        <Button className='w-full' onClick={()=> dispatch(addCartProduct({productId : product._id,userId :user.id})
+                        )} >
                             Add to Cart
                         </Button>
                         :
                         <div className='w-full flex flex-row items-center justify-between'>
-                            <Button  className='font-bold' onClick ={()=> {dispatch(deleteCartProduct({cartProductId :cartProduct._id})),fetchCartProduct()}}>
+                            <Button  className='font-bold' onClick ={()=> {
+                                dispatch(deleteCartProduct({cartProductId :cartProduct._id}))
+                            }}>
                                 -
                             </Button>
                              <p className='font-bold text-2xl'>{cartProduct.quantity} </p>
-                            <Button  className='font-bold' onClick ={()=>{dispatch(addCartProduct({productId : product._id,userId :user.id})),fetchCartProduct()}}>
+                            <Button  className='font-bold' onClick ={()=>{
+                                dispatch(addCartProduct({productId : product._id,userId :user.id}))
+                            }}>
                                 +
                             </Button>
                         </div>
