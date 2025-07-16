@@ -34,7 +34,6 @@ function  ShoppingListing() {
   console.log({cartProduct});
   console.log(user.id);
 
-  // functions used in the code :
   const handleSort = (value) => {
     console.log({value});
     setSort(value);

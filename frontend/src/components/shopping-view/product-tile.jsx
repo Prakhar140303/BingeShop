@@ -34,7 +34,7 @@ export default function ShoppingProductTile({product, isHome = false,cartMap =ne
                         <span className='text-sm text-muted-foreground'>{capitalizeWords(product.brand)}</span>
                     </div>
                     <div className='flex justify-between gap-2 items-center mb-2'>
-                        <span className={'  '+ (product.salePrice > 0 ? ' line-through  text-sm' : ' text-primary font-semibold text-lg')}>${product.price}</span>
+                        <span className={' '+ (product.salePrice > 0 ? ' line-through  text-sm' : ' text-primary font-semibold text-lg')}>${product.price}</span>
                         {product.salePrice > 0 && <span className='text-lg font-semibold'>$ {product.salePrice}</span>}
                     </div>
                 </CardContent>
