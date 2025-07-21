@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter } from '../ui/card'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchCartProduct,addCartProduct,deleteCartProduct } from '@/store/shop/product-slice'
+import { addCartProduct,deleteCartProduct } from '@/store/shop/product-slice'
 function capitalizeWords(str) {
   return str
     .split(" ")
