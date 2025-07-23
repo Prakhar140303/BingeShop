@@ -29,7 +29,7 @@ function  ShoppingListing() {
   const {FilteredProductList,totalPages, cartProduct} = useSelector((state) => state.shopProduct);  
   const {user} = useSelector((state)=> state.auth);
   const cartMap =useMemo(()=>{  
-    return new Map(cartProduct.map(item =>[item.productId,item]));
+    return new Map(cartProduct.map(item =>[item.productId._id,item]));
   },[cartProduct]);
   console.log({cartProduct});
   console.log(user.id);

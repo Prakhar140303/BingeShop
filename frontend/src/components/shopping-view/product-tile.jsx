@@ -17,7 +17,7 @@ export default function ShoppingProductTile({product, isHome = false,cartMap =ne
     const cartProduct = cartMap.get(product._id);
     return (
         <Card className={`p-41 ${isHome ? 'hover:scale-105':''}`}>
-            <div className='flex flex-col justify-between min-h-[360px] min-w-[200px] shadow-xl'>
+            <div className='flex flex-col justify-between min-h-[50vh] min-w-[250px] shadow-xl'>
                 <div className='relative'>
                     <img src={product.image} alt={product.title} className='w-full h-[175px] object-cover rounded-t-lg' />
                     {

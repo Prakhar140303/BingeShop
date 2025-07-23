@@ -6,7 +6,7 @@ const getCartProduct =  async (req,res)=>{
     try{
         const {userId} = req.params;
         console.log({userId});
-        const allProduct =await Cart.find({userId });
+        const allProduct =await Cart.find({userId }).populate('userId').populate('productId');
         return res.status(200).json({
             success: true,
             message : 'Cart product fetched successfully!',

@@ -10,6 +10,7 @@ import {DropdownMenu, DropdownMenuTrigger,
 import { Avatar, AvatarFallback } from '../ui/avatar'
 import { DropdownMenuItem } from '@radix-ui/react-dropdown-menu'
 import { logoutUser } from '@/store/auth-slice' 
+import {motion} from 'framer-motion'
 function capitalize(str) {
   if (!str) return '';
   return str[0].toUpperCase() + str.slice(1).toLowerCase();
@@ -33,10 +34,13 @@ function HeaderRightContent(){
     dispatch(logoutUser());
   }
   return <div className='flex lg:items-center lg:flex-row flex-col gap-4'>
-    <Button varient='outline' size='icon'>
-      <ShoppingCart className='size-6'/>
-      <span className='sr-only'>User Cart</span>
-    </Button>
+    <motion.div initial={{scale:1}} whileHover={{scale :1.15}}> 
+      <Button varient='outline' size='icon' onClick ={()=>{navigate('/shop/checkout')}}>
+        <ShoppingCart className='size-6'/>
+        <span className='sr-only'>User Cart</span>
+      </Button>
+
+    </motion.div>
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className='bg-black'>
