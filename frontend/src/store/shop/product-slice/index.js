@@ -3,14 +3,14 @@ import axiosInstance from '@/lib/axiosInstance';
 
 const initialState = {
   isProductLoading: false,
-  isLoadingCart: false,
   FilteredProductList: [],
   allProduct: [],
   cartProduct: [],
-  totalPages: 0
+  totalPages: 0,
+  loadingProductId: null // <-- Added for per-product loading
 };
 
-export const fetchAllFitteredProducts = createAsyncThunk(
+export const fetchAllFilteredProducts = createAsyncThunk(
   '/product/fetchAllFilteredProducts',
   async ({ filters, SortType, page, limit }, thunkAPI) => {
     try {
@@ -81,20 +81,22 @@ const shopProductSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllFitteredProducts.pending, (state) => {
+      // FILTERED PRODUCTS
+      .addCase(fetchAllFilteredProducts.pending, (state) => {
         state.isProductLoading = true;
       })
-      .addCase(fetchAllFitteredProducts.fulfilled, (state, action) => {
+      .addCase(fetchAllFilteredProducts.fulfilled, (state, action) => {
         state.isProductLoading = false;
         state.FilteredProductList = action.payload.data;
         state.totalPages = action.payload.totalPages;
       })
-      .addCase(fetchAllFitteredProducts.rejected, (state) => {
+      .addCase(fetchAllFilteredProducts.rejected, (state) => {
         state.isProductLoading = false;
         state.FilteredProductList = [];
         state.totalPages = 0;
       })
 
+      // ALL PRODUCTS
       .addCase(fetchAllProduct.pending, (state) => {
         state.isProductLoading = true;
       })
@@ -107,19 +109,15 @@ const shopProductSlice = createSlice({
         state.allProduct = [];
       })
 
-      .addCase(fetchCartProduct.pending, (state) => {
-        state.isLoadingCart = true;
-      })
+      // CART PRODUCTS
       .addCase(fetchCartProduct.fulfilled, (state, action) => {
-        state.isLoadingCart = false;
         state.cartProduct = action.payload.data;
       })
-      .addCase(fetchCartProduct.rejected, (state) => {
-        state.isLoadingCart = false;
-        state.cartProduct = [];
-      })
 
-      // ─── NEW: handle addCartProduct.fulfilled ─────────────────────────────────
+      // ADD CART PRODUCT
+      .addCase(addCartProduct.pending, (state, action) => {
+        state.loadingProductId = action.meta.arg.productId; // Track specific product
+      })
       .addCase(addCartProduct.fulfilled, (state, action) => {
         const newItem = action.payload.data;
         const idx = state.cartProduct.findIndex(i => i._id === newItem._id);
@@ -128,8 +126,17 @@ const shopProductSlice = createSlice({
         } else {
           state.cartProduct.push(newItem);
         }
+        state.loadingProductId = null; // Reset after success
+      })
+      .addCase(addCartProduct.rejected, (state) => {
+        state.loadingProductId = null; // Reset on error
       })
 
+      // DELETE CART PRODUCT
+      .addCase(deleteCartProduct.pending, (state, action) => {
+        const cartItem = state.cartProduct.find(i => i._id === action.meta.arg.cartProductId);
+        state.loadingProductId = cartItem ? cartItem.productId._id : null;
+      })
       .addCase(deleteCartProduct.fulfilled, (state, action) => {
         const returned = action.payload.data;
         if (returned && returned._id) {
@@ -141,6 +148,10 @@ const shopProductSlice = createSlice({
           const removedId = action.meta.arg.cartProductId;
           state.cartProduct = state.cartProduct.filter(i => i._id !== removedId);
         }
+        state.loadingProductId = null;
+      })
+      .addCase(deleteCartProduct.rejected, (state) => {
+        state.loadingProductId = null;
       });
   }
 });

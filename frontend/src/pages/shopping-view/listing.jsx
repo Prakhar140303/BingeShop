@@ -5,7 +5,7 @@ import React,{useState, useEffect, useMemo} from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowDownUp } from 'lucide-react'
 import { sortOptions } from '@/config'
-import { fetchAllFitteredProducts,fetchCartProduct } from '@/store/shop/product-slice'
+import { fetchAllFilteredProducts,fetchCartProduct } from '@/store/shop/product-slice'
 import ShoppingProductTile from '@/components/shopping-view/product-tile'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
@@ -31,8 +31,6 @@ function  ShoppingListing() {
   const cartMap =useMemo(()=>{  
     return new Map(cartProduct.map(item =>[item.productId._id,item]));
   },[cartProduct]);
-  console.log({cartProduct});
-  console.log(user.id);
 
   const handleSort = (value) => {
     console.log({value});
@@ -82,7 +80,7 @@ function  ShoppingListing() {
 
 
   useEffect(()=>{
-    dispatch(fetchAllFitteredProducts({filters,SortType,page,limit}));
+    dispatch(fetchAllFilteredProducts({filters,SortType,page,limit}));
     
   },[dispatch,filters,SortType,page,limit]);
   return (
@@ -117,7 +115,7 @@ function  ShoppingListing() {
             </DropdownMenu>
           </div>
         </div>
-        <div className='grid grid-cols-1 gap-2 my-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+        <div className='grid grid-cols-1 gap-8 my-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
           {
             FilteredProductList.map((product) => (
               <ShoppingProductTile key={product._id} product={product} cartMap ={cartMap}/>

@@ -2,13 +2,15 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux'; 
-import ShoppingProductTile from '../../components/shopping-view/product-tile'
+import ShoppingProductTile from '../../components/shopping-view/product-tile';
 import { fetchAllProduct } from '@/store/shop/product-slice';
+
 function ShoppingHome() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {allProduct} = useSelector((state) => state.shopProduct); 
-  console.log({allProduct})
+  const { allProduct } = useSelector((state) => state.shopProduct); 
+  console.log({ allProduct });
+
   const brandLogos = [
     "https://cdn.brandfetch.io/nike.com/w/512/h/178/logo?c=1id83BrBUv9aNb1zf02",
     "https://cdn.brandfetch.io/puma.com/w/512/h/254/logo?c=1id83BrBUv9aNb1zf02",
@@ -19,9 +21,11 @@ function ShoppingHome() {
   ];
 
   const repeatedLogos = [...brandLogos, ...brandLogos]; // duplicate for seamless loop
+
   useEffect(() => {
     dispatch(fetchAllProduct({}));
-  },[dispatch])
+  }, [dispatch]);
+
   return (
     <div className='flex flex-col gap-6'>
       {/* Hero Section */}
@@ -39,7 +43,7 @@ function ShoppingHome() {
           </h2>
           <div className='flex flex-row justify-around w-full'>
             <motion.button
-              className='bg-primary text-white px-4 py-3 md:text-lg text-sm  rounded-lg hover:shadow-xl md:min-w-[150px] min-w-[100px]'
+              className='bg-primary text-white px-4 py-3 md:text-lg text-sm rounded-lg hover:shadow-xl md:min-w-[150px] min-w-[100px]'
               initial={{ scale: 1 }}
               whileHover={{ scale: 1.05 }}
               onClick={() => navigate('/shop/listing')}
@@ -55,11 +59,10 @@ function ShoppingHome() {
             </motion.button>
           </div>
         </div>
-
-        
       </div>
 
-      <div className="relative overflow-hidden h-24 w-full mt-10 bg-[#e3e8f9] flex justify-center items-center" >
+      {/* Scrolling Brand Logos */}
+      <div className="relative overflow-hidden h-24 w-full mt-10 bg-[#e3e8f9] flex justify-center items-center">
         <motion.div
           className="flex gap-12 w-max items-center"
           animate={{ x: ["0%", "-50%"] }}
@@ -79,21 +82,40 @@ function ShoppingHome() {
           ))}
         </motion.div>
       </div>
-          <div className='flex flex-row gap-4 justify-around bg-[#E1D9EA] my-2 overflow-x-auto rounded-lg no-scrollbar'>
-            {
-              allProduct.filter(product => product.salePrice >0).map((product) => (
-                <div className=' w-[300px] py-12'>
-                  <ShoppingProductTile key={product._id} product={product} isHome ={true} />
-                </div>
-              ))
-            }
-          </div>
-      <div className='flex flex-col md:flex-row justify-around items-center h-[320px]'>
-          <div>
-            <img src="/shoeHover.png" alt=""  className='md:max-h-[300px] max-h-[200px] animate-float'/>
-          </div>
-          
+
+      {/* Sale Products */}
+      <div className='flex flex-row gap-8 justify-around bg-[#E1D9EA] my-2 overflow-x-auto rounded-lg no-scrollbar'>
+        {
+          allProduct.filter(product => product.salePrice > 0).map((product) => (
+            <div className='w-[300px] py-12' key={product._id}>
+              <ShoppingProductTile product={product} isHome={true} />
+            </div>
+          ))
+        }
       </div>
+
+      {/* Extra Section */}
+      <div className='flex flex-col md:flex-row justify-around items-center h-[320px]'>
+        <div>
+          <img src="/shoeHover.png" alt="" className='md:max-h-[300px] max-h-[200px] animate-float' />
+        </div>
+      </div>
+
+      {/* Footer Section */}
+      <footer className="bg-gray-900 text-white py-6 mt-6">
+        <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4 px-6">
+          <div className="text-center md:text-left">
+            <h2 className="text-lg font-bold">BingeShop</h2>
+            <p className="text-sm text-gray-400">© {new Date().getFullYear()} All Rights Reserved</p>
+          </div>
+          <div className="flex gap-6 text-sm">
+            <a href="/about" className="hover:scale-110">About</a>
+            <a href="/contact" className="hover:scale-110">Contact</a>
+            <a href="/privacy" className="hover:scale-110">Privacy Policy</a>
+            <a href="/terms" className="hover:scale-110">Terms & Conditions</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
