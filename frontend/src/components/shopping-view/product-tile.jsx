@@ -1,10 +1,10 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { Card, CardContent, CardFooter } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCartProduct, deleteCartProduct, fetchCartProduct } from '@/store/shop/product-slice';
-import { motion, scale } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 function capitalizeWords(str) {
   return str
@@ -17,21 +17,23 @@ export default function ShoppingProductTile({ product, isHome = false }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { cartProduct, loadingProductId } = useSelector(state => state.shopProduct);
-
   const MotionCard = motion(Card);
-
   const productInCart = cartProduct.find(item => item.productId._id === product._id);
-  const productQuantity = productInCart ? productInCart.quantity : 0;
+
+
   const isCurrentLoading = loadingProductId === product._id;
+  const [productQuantity,setProductQuantity] = useState(productInCart ? productInCart.quantity : 0);
 
   const handleAdd = async () => {
     await dispatch(addCartProduct({ userId: user.id, productId: product._id })).unwrap();
     dispatch(fetchCartProduct({ userId: user.id }));
+    setProductQuantity(prev => prev + 1);
   };
 
   const handleRemove = async () => {
     await dispatch(deleteCartProduct({ cartProductId: productInCart._id })).unwrap();
     dispatch(fetchCartProduct({ userId: user.id }));
+    setProductQuantity(prev => Math.max(0, prev - 1));
   };
 
   return (
@@ -65,7 +67,7 @@ export default function ShoppingProductTile({ product, isHome = false }) {
         {/* Footer Buttons */}
         <CardFooter>
           {isCurrentLoading ? (
-            <div className=""></div>
+            <div className="">wait..</div>
           ) : !isHome && (productQuantity === 0 ? (
             <Button className="w-full" onClick={handleAdd}>
               Add to Cart

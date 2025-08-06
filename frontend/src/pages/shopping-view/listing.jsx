@@ -26,11 +26,8 @@ function  ShoppingListing() {
   const limit = parseInt(searchParams.get('limit')) || 10;
   const dispatch = useDispatch();
   
-  const {FilteredProductList,totalPages, cartProduct} = useSelector((state) => state.shopProduct);  
+  const {FilteredProductList,totalPages} = useSelector((state) => state.shopProduct);  
   const {user} = useSelector((state)=> state.auth);
-  const cartMap =useMemo(()=>{  
-    return new Map(cartProduct.map(item =>[item.productId._id,item]));
-  },[cartProduct]);
 
   const handleSort = (value) => {
     console.log({value});
@@ -115,10 +112,10 @@ function  ShoppingListing() {
             </DropdownMenu>
           </div>
         </div>
-        <div className='grid grid-cols-1 gap-8 my-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+        <div className='grid grid-cols-1 gap-8 my-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3'>
           {
             FilteredProductList.map((product) => (
-              <ShoppingProductTile key={product._id} product={product} cartMap ={cartMap}/>
+              <ShoppingProductTile key={product._id} product={product} />
             ))
           }
         </div>
