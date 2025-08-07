@@ -1,10 +1,11 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import { Card, CardContent, CardFooter } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCartProduct, deleteCartProduct, fetchCartProduct } from '@/store/shop/product-slice';
 import { motion } from 'framer-motion';
+import {useToast} from '@/hooks/use-toast'
 
 function capitalizeWords(str) {
   return str
@@ -15,6 +16,7 @@ function capitalizeWords(str) {
 
 export default function ShoppingProductTile({ product, isHome = false }) {
   const dispatch = useDispatch();
+  const { toast } = useToast();
   const { user } = useSelector((state) => state.auth);
   const { cartProduct, loadingProductId } = useSelector(state => state.shopProduct);
   const MotionCard = motion(Card);
@@ -28,17 +30,25 @@ export default function ShoppingProductTile({ product, isHome = false }) {
     await dispatch(addCartProduct({ userId: user.id, productId: product._id })).unwrap();
     dispatch(fetchCartProduct({ userId: user.id }));
     setProductQuantity(prev => prev + 1);
+    toast({
+      title: 'Product added to cart',
+    });
   };
 
   const handleRemove = async () => {
     await dispatch(deleteCartProduct({ cartProductId: productInCart._id })).unwrap();
     dispatch(fetchCartProduct({ userId: user.id }));
     setProductQuantity(prev => Math.max(0, prev - 1));
+    toast({
+      title: 'Product removed from cart',
+    });
   };
-
+  useEffect(() => {
+    dispatch(fetchCartProduct({ userId: user.id }));
+  }, [dispatch, user.id]);
   return (
-    <MotionCard className="p-4" whileHover={{ scale: 1.05 }} whileTap={{scale: 1}} transition={{ duration: 0.2, ease: "easeInOut" }}>
-      <div className="flex flex-col justify-between min-h-[50vh] min-w-[35vh] shadow-2xl shadow-black rounded-xl">
+    <MotionCard className="" whileHover={{ scale: 1.02 }} whileTap={{scale: 1}} transition={{ duration: 0.2, ease: "easeInOut" }}>
+      <div className="flex flex-col justify-between min-h-[50vh] min-w-[35wh] shadow-2xl shadow-black rounded-xl">
         {/* Image Section */}
         <div className="relative">
           <img src={product.image} alt={product.title} className="w-full h-[20vh] object-cover object-center rounded-t-lg" />

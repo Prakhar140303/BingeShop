@@ -87,7 +87,7 @@ function ShoppingHome() {
       <div className='flex flex-row gap-8 justify-around bg-[#E1D9EA] my-2 overflow-x-auto rounded-lg no-scrollbar'>
         {
           allProduct.filter(product => product.salePrice > 0).map((product) => (
-            <div className='w-[300px] py-12' key={product._id}>
+            <div className='min-w-[40vh] py-12' key={product._id}>
               <ShoppingProductTile product={product} isHome={true} />
             </div>
           ))

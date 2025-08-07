@@ -37,7 +37,7 @@ export default function ShoppingCheckout() {
     <div className='flex md:flex-row flex-col w-full pt-12'>
       <div className='flex-[2] flex flex-col gap-2  pl-20 max-h-screen overflow-y-auto no-scrollbar'>
         {cartProduct.map((product, idx) => (
-          <div className='flex flex-row w-full border-[2px] rounded-xl max-h-[32vh] border-gray-300 shadow-lg ' key={product._id || idx}>
+          <div className='flex sm:flex-row flex-col w-full border-[2px] rounded-xl max-h-[32vh] border-gray-300 shadow-lg ' key={product._id || idx}>
             <img
               className='h-full min-w-[32vh] w-[32vh] object-cover rounded-lg'
               src={product.productId.image}
