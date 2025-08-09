@@ -1,7 +1,7 @@
 import ProductFilter from '@/components/shopping-view/productFilter'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
    DropdownMenuRadioGroup, DropdownMenuRadioItem} from '@/components/ui/dropdown-menu'
-import React,{useState, useEffect, useMemo} from 'react'
+import React,{useState, useEffect} from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowDownUp } from 'lucide-react'
 import { sortOptions } from '@/config'
