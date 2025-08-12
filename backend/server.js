@@ -8,7 +8,7 @@ import authRoutes from "./src/routes/auth/auth-routes.js";
 import adminProductRoutes from "./src/routes/admin/products-routes.js";
 import shopProductRoutes from "./src/routes/shop/products-routes.js";   
 import cartRoutes from "./src/routes/shop/cart-routes.js"
-
+import paymentRoutes from "./src/routes/payments/payments.routes.js";
 import path from 'path'
 
 const app = express();
@@ -37,6 +37,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin/products", adminProductRoutes);
 app.use("/api/shop/products", shopProductRoutes);
 app.use("/api/shop/products/cart", cartRoutes);
+app.use("/api/payments", paymentRoutes);
 
 
 const __dirname = path.resolve();
