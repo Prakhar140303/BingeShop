@@ -3,7 +3,9 @@ import axiosInstance from "@/lib/axiosInstance";
 const initialState = {
     isAuthenticated: false,
     isLoading : true,
-    user : null
+    isLoadingAddress : true,
+    user : null,
+    Addresses : []
 
 };
 export const registerUser = createAsyncThunk('/auth/register', async (formData, { rejectWithValue }) => {
@@ -32,7 +34,6 @@ export const loginUser = createAsyncThunk('/auth/login', async (formData, { reje
 });
 export const logoutUser = createAsyncThunk('/auth/logout', async (_,{rejectWithValue }) => {
     try {
-        console.log('reached thunk');
         const response = await axiosInstance.post('/auth/logout', {},{ withCredentials: true });
         return response.data;  
     } catch (error) {
@@ -44,13 +45,37 @@ export const logoutUser = createAsyncThunk('/auth/logout', async (_,{rejectWithV
     }
 });
 export const checkAuth = createAsyncThunk('/auth/checkAuth', async () => {
-        const response = await axiosInstance.get('/auth/check-auth',
-            { withCredentials: true, 
-                headers: {
-                    'Cache-Control': 'no-cache, no-store, must-revalidate, proxy-revalidate'
-                }
+    const response = await axiosInstance.get('/auth/check-auth',
+        { withCredentials: true, 
+            headers: {
+                'Cache-Control': 'no-cache, no-store, must-revalidate, proxy-revalidate'
+            }
         });
         return response.data;  
+    });
+export const getAddress = createAsyncThunk('/auth/address/get-address', async (_,{rejectWithValue}) => {
+    try{
+        const response = await axiosInstance.get('/auth/address/get-address', { withCredentials: true });
+        return response.data;
+    }catch(error) {
+        if (error.response) {
+            return rejectWithValue(error.response.data);
+        } else {
+            return rejectWithValue({ message: "Network Error" });
+        }
+    }
+});
+export const  addAddress = createAsyncThunk('/auth/address/add-address', async (formData, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.post('/auth/address/add-address', { user : initialState.user ,address : formData}, { withCredentials: true });
+        return response.data;  
+    } catch (error) {
+        if (error.response) {
+            return rejectWithValue(error.response.data);
+        } else {
+            return rejectWithValue({ message: "Network Error" });
+        }
+    }
 });
 const authSlice = createSlice({
     name: "auth",
@@ -101,7 +126,32 @@ const authSlice = createSlice({
              state.user = null;
              state.isAuthenticated = false;
          })
+         .addCase(getAddress.pending,(state)=>{
+             state.isLoadingAddress = true;
+             state.Addresses =[];
+            })
+         .addCase(getAddress.rejected,(state)=>{
+             state.isLoadingAddress = false;
+             state.Addresses =[];
+            })
+            .addCase(getAddress.fulfilled,(state,action)=>{
+                state.isLoading = false;
+                state.Addresses = action.payload.data;
+         })
+         .addCase(addAddress.pending,(state)=>{
+             state.isLoadingAddress = true;
+             state.Addresses =[];
+            })
+         .addCase(addAddress.rejected,(state)=>{
+             state.isLoadingAddress = false;
+             state.Addresses =[];
+            })
+            .addCase(addAddress.fulfilled,(state,action)=>{
+                state.isLoading = false;
+                state.Addresses = action.payload.data;
+         })
     }
 })
+
 export const {setUser} = authSlice.actions;
 export default authSlice.reducer;

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux'; 
 import ShoppingProductTile from '../../components/shopping-view/product-tile';
 import { fetchAllProduct } from '@/store/shop/product-slice';
-
+import FAQSection from '@/components/shopping-view/FAQSection';
 function ShoppingHome() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ function ShoppingHome() {
   }, [dispatch]);
 
   return (
-    <div className='flex flex-col gap-6'>
+    <div className='flex flex-col gap-6 px-2'>
       {/* Hero Section */}
       <div className='flex md:flex-row-reverse flex-col m-4 py-4 px-2 justify-around items-center bg-[#E1D9EA] rounded-xl'>
         <div>
@@ -95,27 +95,17 @@ function ShoppingHome() {
       </div>
 
       {/* Extra Section */}
-      <div className='flex flex-col md:flex-row justify-around items-center h-[320px]'>
-        <div>
-          <img src="/shoeHover.png" alt="" className='md:max-h-[300px] max-h-[200px] animate-float' />
+      <div className='flex flex-col md:flex-row  items-center  bg-[#e3e8f9]'>
+        <div className='hidden  flex-[2] md:flex justify-center items-center'>
+          <img src="/shoeHover.png" alt="" className='md:max-h-[300px] max-h-[200px] animate-float ' />
+        </div>
+        <div className='md:flex-[3] w-full'>
+          <FAQSection/>
         </div>
       </div>
 
       {/* Footer Section */}
-      <footer className="bg-gray-900 text-white py-6 mt-6">
-        <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4 px-6">
-          <div className="text-center md:text-left">
-            <h2 className="text-lg font-bold">BingeShop</h2>
-            <p className="text-sm text-gray-400">© {new Date().getFullYear()} All Rights Reserved</p>
-          </div>
-          <div className="flex gap-6 text-sm">
-            <a href="/about" className="hover:scale-110">About</a>
-            <a href="/contact" className="hover:scale-110">Contact</a>
-            <a href="/privacy" className="hover:scale-110">Privacy Policy</a>
-            <a href="/terms" className="hover:scale-110">Terms & Conditions</a>
-          </div>
-        </div>
-      </footer>
+      
     </div>
   );
 }

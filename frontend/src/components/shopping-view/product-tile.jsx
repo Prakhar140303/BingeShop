@@ -1,5 +1,6 @@
 import React,{useEffect, useState} from 'react';
 import { Card, CardContent, CardFooter } from '../ui/card';
+import { ShoppingCart } from 'lucide-react';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { useDispatch, useSelector } from 'react-redux';
@@ -80,7 +81,7 @@ export default function ShoppingProductTile({ product, isHome = false }) {
             <div className="">wait..</div>
           ) : !isHome && (productQuantity === 0 ? (
             <Button className="w-full" onClick={handleAdd}>
-              Add to Cart
+              <ShoppingCart />
             </Button>
           ) : (
             <div className="w-full flex flex-row items-center justify-between">

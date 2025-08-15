@@ -78,7 +78,7 @@ function ShoppingHeader() {
         </Link> 
         <Sheet>
           <SheetTrigger asChild>
-            <Button varient='outline' size='icon' className='md:hidden'>
+            <Button varient='outline' size='icon' className='lg:hidden'>
               <Menu />
               <span className='sr-only'>Toggle header menu</span>
             </Button>
