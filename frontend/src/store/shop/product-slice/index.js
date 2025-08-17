@@ -7,8 +7,11 @@ const initialState = {
   allProduct: [],
   cartProduct: [],
   totalPages: 0,
-  loadingProductId: null // <-- Added for per-product loading
+  loadingProductId: null, // Track per-product loading
+  isCartLoading: false,
 };
+
+// ====== Thunks ======
 
 export const fetchAllFilteredProducts = createAsyncThunk(
   '/product/fetchAllFilteredProducts',
@@ -54,6 +57,7 @@ export const addCartProduct = createAsyncThunk(
   async ({ userId, productId }, thunkAPI) => {
     try {
       const result = await axiosInstance.post('/shop/products/cart/add', { userId, productId });
+      // console.log("ADD CART RESPONSE:", result.data);
       return result?.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response?.data || err.message);
@@ -66,7 +70,7 @@ export const deleteCartProduct = createAsyncThunk(
   async ({ cartProductId }, thunkAPI) => {
     try {
       const result = await axiosInstance.delete(`/shop/products/cart/delete/${cartProductId}`, {
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       });
       return result?.data;
     } catch (err) {
@@ -74,6 +78,8 @@ export const deleteCartProduct = createAsyncThunk(
     }
   }
 );
+
+// ====== Slice ======
 
 const shopProductSlice = createSlice({
   name: 'shoppingProducts',
@@ -110,8 +116,16 @@ const shopProductSlice = createSlice({
       })
 
       // CART PRODUCTS
+      .addCase(fetchCartProduct.pending, (state) => {
+        state.isCartLoading = true;
+      })
       .addCase(fetchCartProduct.fulfilled, (state, action) => {
+        state.isCartLoading = false;
         state.cartProduct = action.payload.data;
+      })
+      .addCase(fetchCartProduct.rejected, (state) => {
+        state.isCartLoading = false;
+        state.cartProduct = [];
       })
 
       // ADD CART PRODUCT
@@ -120,40 +134,48 @@ const shopProductSlice = createSlice({
       })
       .addCase(addCartProduct.fulfilled, (state, action) => {
         const newItem = action.payload.data;
-        const idx = state.cartProduct.findIndex(i => i._id === newItem._id);
+        const idx = state.cartProduct.findIndex(
+          (i) => i.productId._id === newItem.productId._id
+        );
+
         if (idx >= 0) {
-          state.cartProduct[idx] = newItem;
+          state.cartProduct[idx].quantity = newItem.quantity;
         } else {
           state.cartProduct.push(newItem);
         }
-        state.loadingProductId = null; // Reset after success
+
+        state.loadingProductId = null;
       })
       .addCase(addCartProduct.rejected, (state) => {
-        state.loadingProductId = null; // Reset on error
+        state.loadingProductId = null;
       })
 
       // DELETE CART PRODUCT
       .addCase(deleteCartProduct.pending, (state, action) => {
-        const cartItem = state.cartProduct.find(i => i._id === action.meta.arg.cartProductId);
+        const cartItem = state.cartProduct.find(
+          (i) => i._id === action.meta.arg.cartProductId
+        );
         state.loadingProductId = cartItem ? cartItem.productId._id : null;
       })
       .addCase(deleteCartProduct.fulfilled, (state, action) => {
         const returned = action.payload.data;
+
         if (returned && returned._id) {
-          const idx = state.cartProduct.findIndex(i => i._id === returned._id);
+          const idx = state.cartProduct.findIndex((i) => i._id === returned._id);
           if (idx >= 0) {
             state.cartProduct[idx].quantity = returned.quantity;
           }
         } else {
           const removedId = action.meta.arg.cartProductId;
-          state.cartProduct = state.cartProduct.filter(i => i._id !== removedId);
+          state.cartProduct = state.cartProduct.filter((i) => i._id !== removedId);
         }
+
         state.loadingProductId = null;
       })
       .addCase(deleteCartProduct.rejected, (state) => {
         state.loadingProductId = null;
       });
-  }
+  },
 });
 
 export default shopProductSlice.reducer;

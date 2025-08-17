@@ -9,7 +9,6 @@ function ShoppingHome() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { allProduct } = useSelector((state) => state.shopProduct); 
-  console.log({ allProduct });
 
   const brandLogos = [
     "https://cdn.brandfetch.io/nike.com/w/512/h/178/logo?c=1id83BrBUv9aNb1zf02",
@@ -24,7 +23,7 @@ function ShoppingHome() {
 
   useEffect(() => {
     dispatch(fetchAllProduct({}));
-  }, [dispatch]);
+  }, []);
 
   return (
     <div className='flex flex-col gap-6 px-2'>

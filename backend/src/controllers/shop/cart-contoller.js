@@ -5,7 +5,7 @@ const getCartProduct =  async (req,res)=>{
     
     try{
         const {userId} = req.params;
-        console.log({userId});
+        console.log({userId}, "in getCartProduct");
         const allProduct =await Cart.find({userId }).populate('userId').populate('productId');
         return res.status(200).json({
             success: true,
@@ -36,6 +36,7 @@ const addCartProduct = async (req,res)=>{
                 // found in cart 
                 cartProduct.quantity +=1;
                 await cartProduct.save();
+                await cartProduct.populate([{ path: 'productId' }, { path: 'userId' }]); ;
                 return res.status(201).json({
                     success: true,
                     message: 'Product added to cart successfully',
@@ -55,11 +56,12 @@ const addCartProduct = async (req,res)=>{
                         data : []
                     })
                 }
+                const populatedCartProduct = await Cart.findById(newlyCreatedCartProduct._id).populate([{ path: 'productId' }, { path: 'userId' }]);
                 // successfully added in cart
                 res.status(201).json({
                     success : true,
                     message : "Cart Product created successfully",
-                    data : newlyCreatedCartProduct
+                    data : populatedCartProduct
                 })
             }
         }else{  

@@ -3,7 +3,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
    DropdownMenuRadioGroup, DropdownMenuRadioItem} from '@/components/ui/dropdown-menu'
 import React,{useState, useEffect} from 'react'
 import { Button } from '@/components/ui/button'
-import { ArrowDownUp } from 'lucide-react'
+import { ArrowDownUp, UndoIcon } from 'lucide-react'
 import { sortOptions } from '@/config'
 import { fetchAllFilteredProducts,fetchCartProduct } from '@/store/shop/product-slice'
 import ShoppingProductTile from '@/components/shopping-view/product-tile'
@@ -23,12 +23,11 @@ function  ShoppingListing() {
   const [sort,setSort] = useState(null);  
   const [searchParams,setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 10;
+  const limit = parseInt(searchParams.get('limit')) || 21;
   const dispatch = useDispatch();
   
-  const {FilteredProductList,totalPages} = useSelector((state) => state.shopProduct);  
+  const {FilteredProductList,totalPages, cartProduct,isCartLoading} = useSelector((state) => state.shopProduct);  
   const {user} = useSelector((state)=> state.auth);
-
   const handleSort = (value) => {
     console.log({value});
     setSort(value);
@@ -74,8 +73,6 @@ function  ShoppingListing() {
     }
   },[dispatch,user?.id])
 
-
-
   useEffect(()=>{
     dispatch(fetchAllFilteredProducts({filters,SortType,page,limit}));
     
@@ -89,6 +86,7 @@ function  ShoppingListing() {
             All products
           </h2>
           <div className='flex items-center gap-3'>
+
             <span className='text-muted-foreground mr-2'>
               {FilteredProductList.length} products
             </span>
@@ -113,10 +111,18 @@ function  ShoppingListing() {
           </div>
         </div>
         <div className='grid grid-cols-1 gap-8 my-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 p-4'>
-          {
-            FilteredProductList.map((product) => (
-              <ShoppingProductTile key={product._id} product={product} />
-            ))
+          { !isCartLoading ?
+            FilteredProductList.map((product) =>{ 
+               let cartEntry = cartProduct?.find((c) => c.productId._id === product._id);
+              if(!cartEntry){
+                cartEntry = { quantity: 0, _id: null }; // Default value if not found
+              }
+              return(
+              console.log({cartEntry}, "cartEntry in listing"),
+              <ShoppingProductTile key={product._id} product={product} cartEntry = {cartEntry}/>
+            )}) : <div>
+              <p className='text-center text-muted-foreground'>Loading products...</p>
+            </div>
           }
         </div>
         <div className='flex items-center justify-center gap-4 py-4'>
