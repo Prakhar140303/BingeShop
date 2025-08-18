@@ -3,8 +3,8 @@ import Address from '../../models/address-model.js';
 
 const fetchAddress = async (req, res) => {
     try {
-       
-        const userId = req.body.user._id; 
+       console.log(req.query);
+        const userId = req.query.userId; 
         const addresses = await Address.find({ user: userId });
         return res.status(200).json({
             success: true,
@@ -23,7 +23,7 @@ const addAddress = async (req, res) => {
     
     try {
         console.log(req.body);
-        const userId = req.body.user._id; 
+        const userId = req.body.user.id; 
         const { label, street, city, state, postalCode, country } = req.body.address;
         const newAddress = new Address({
             user: userId,

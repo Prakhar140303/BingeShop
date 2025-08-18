@@ -62,7 +62,7 @@ export default function ShoppingProductTile({ product, isHome = false }) {
           <img
             src={product.image}
             alt={product.title}
-            className="w-full h-[20vh] object-cover object-center rounded-t-lg"
+            className="w-full h-[20vh]  rounded-t-lg"
             onError={(e) => {
               e.currentTarget.src = '/fallback.png';
             }}

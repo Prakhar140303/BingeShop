@@ -53,12 +53,12 @@ function HeaderRightContent(){
       <DropdownMenuContent side='right' className='w-56 min-h-20'>
         <DropdownMenuLabel>Logged in as <strong>{capitalize(user?.username)}</strong></DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className='flex flex-row' onClick={() => navigate('/shop/account')}>
-          <CircleUser  className='mr-2 size-6'/>
+        <DropdownMenuItem className='flex flex-row hover:cursor-pointer' onClick={() => navigate('/shop/account')}>
+          <CircleUser  className='mr-2 size-6 '/>
           Account
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className='flex flex-row' onClick={() => handleLogout()}>
+        <DropdownMenuItem className='flex flex-row hover:cursor-pointer' onClick={() => handleLogout()}>
           <LogOut className='mr-2 size-6'/>
           Logout
         </DropdownMenuItem>

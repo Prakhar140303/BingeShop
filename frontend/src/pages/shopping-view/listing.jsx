@@ -1,6 +1,7 @@
 import ProductFilter from '@/components/shopping-view/productFilter'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
    DropdownMenuRadioGroup, DropdownMenuRadioItem} from '@/components/ui/dropdown-menu'
+  import {Dialog, DialogContent,DialogHeader,DialogDescription,DialogTitle,DialogTrigger} from '../../components/ui/dialog.jsx'
 import React,{useState, useEffect} from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowDownUp, UndoIcon } from 'lucide-react'
@@ -24,6 +25,8 @@ function  ShoppingListing() {
   const [searchParams,setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 21;
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
   const dispatch = useDispatch();
   
   const {FilteredProductList,totalPages, cartProduct,isCartLoading} = useSelector((state) => state.shopProduct);  
@@ -118,8 +121,29 @@ function  ShoppingListing() {
                 cartEntry = { quantity: 0, _id: null }; // Default value if not found
               }
               return(
-              console.log({cartEntry}, "cartEntry in listing"),
-              <ShoppingProductTile key={product._id} product={product} cartEntry = {cartEntry}/>
+                <div id={product._id}>
+                  <ShoppingProductTile key={product._id} product={product} cartEntry = {cartEntry}/>
+                   {/* Modal Trigger */}
+          <Dialog open={selectedProduct?._id === product._id} onOpenChange={(open) => !open && setSelectedProduct(null)}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="mt-2" onClick={() => setSelectedProduct(product)}>
+                View Details
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-lg">
+              <DialogHeader>
+                <DialogTitle>{product.title}</DialogTitle>
+                <DialogDescription>{product.description}</DialogDescription>
+              </DialogHeader>
+              <div className="flex flex-col gap-4">
+                <img src={product.image} alt={product.title} className="rounded-lg max-h-60 object-contain" />
+                <p className="text-lg font-semibold">Price: ₹{product.price}</p>
+                <Button>Add to Cart</Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+                </div>
+              
             )}) : <div>
               <p className='text-center text-muted-foreground'>Loading products...</p>
             </div>

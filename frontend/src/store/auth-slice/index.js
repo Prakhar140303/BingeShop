@@ -5,7 +5,7 @@ const initialState = {
     isLoading : true,
     isLoadingAddress : true,
     user : null,
-    Addresses : []
+    addresses : []
 
 };
 export const registerUser = createAsyncThunk('/auth/register', async (formData, { rejectWithValue }) => {
@@ -53,9 +53,13 @@ export const checkAuth = createAsyncThunk('/auth/checkAuth', async () => {
         });
         return response.data;  
     });
-export const getAddress = createAsyncThunk('/auth/address/get-address', async (_,{rejectWithValue}) => {
+export const getAddress = createAsyncThunk('/auth/address/get-address', async (_,{getState,rejectWithValue}) => {
     try{
-        const response = await axiosInstance.get('/auth/address/get-address', { withCredentials: true });
+        const {user}= getState().auth;
+        console.log({user}, "user in getAddress");
+        const response = await axiosInstance.get('/auth/address/get-address', { params:{
+            userId : user.id
+        }, withCredentials: true });
         return response.data;
     }catch(error) {
         if (error.response) {
@@ -65,9 +69,9 @@ export const getAddress = createAsyncThunk('/auth/address/get-address', async (_
         }
     }
 });
-export const  addAddress = createAsyncThunk('/auth/address/add-address', async (formData, { rejectWithValue }) => {
-    try {
-        const response = await axiosInstance.post('/auth/address/add-address', { user : initialState.user ,address : formData}, { withCredentials: true });
+export const  addAddress = createAsyncThunk('/auth/address/add-address', async (formData, { getState,rejectWithValue }) => {
+    try {const {user} = getState().auth;
+        const response = await axiosInstance.post('/auth/address/add-address', { user : user ,address : formData}, { withCredentials: true });
         return response.data;  
     } catch (error) {
         if (error.response) {
@@ -128,27 +132,27 @@ const authSlice = createSlice({
          })
          .addCase(getAddress.pending,(state)=>{
              state.isLoadingAddress = true;
-             state.Addresses =[];
+             state.addresses =[];
             })
          .addCase(getAddress.rejected,(state)=>{
              state.isLoadingAddress = false;
-             state.Addresses =[];
+             state.addresses =[];
             })
             .addCase(getAddress.fulfilled,(state,action)=>{
-                state.isLoading = false;
-                state.Addresses = action.payload.data;
+                state.isLoadingAddress = false;
+                state.addresses = action.payload.data;
          })
          .addCase(addAddress.pending,(state)=>{
              state.isLoadingAddress = true;
-             state.Addresses =[];
+             state.addresses =[];
             })
          .addCase(addAddress.rejected,(state)=>{
              state.isLoadingAddress = false;
-             state.Addresses =[];
+             state.addresses =[];
             })
             .addCase(addAddress.fulfilled,(state,action)=>{
-                state.isLoading = false;
-                state.Addresses = action.payload.data;
+                state.isLoadingAddress = false;
+                state.addresses = action.payload.data;
          })
     }
 })
