@@ -1,10 +1,12 @@
 import axiosInstance from "../../lib/axiosInstance.js";
-  import { fetchCartProduct } from '@/store/shop/product-slice';
-  import React, { useEffect } from 'react'
-  import { useSelector, useDispatch } from 'react-redux'
-  import { deleteCartProduct,addCartProduct } from '@/store/shop/product-slice';
-  import { Button } from '@/components/ui/button';
-  import { useToast } from '@/hooks/use-toast';
+import { fetchCartProduct } from '@/store/shop/product-slice';
+import React, { useEffect ,useState} from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { deleteCartProduct,addCartProduct } from '@/store/shop/product-slice';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { getAddress } from "@/store/auth-slice/index.js";
+import AddressChoiceModal from '@/components/shopping-view/AddressChoice.jsx'
   function capitalizeWords(str) {
     if(!str) return '';
     return str
@@ -16,8 +18,13 @@ import axiosInstance from "../../lib/axiosInstance.js";
   export default function ShoppingCheckout() {
     const dispatch = useDispatch();
     const { cartProduct } = useSelector((state) => state.shopProduct);
+    const {addresses} = useSelector((state) => state.auth);
     const { user } = useSelector((state) => state.auth);
     const { toast } = useToast();
+    const [isPaymentoading, setIsPaymentLoading] = useState(false);
+    const [address, setaddress] = useState("");
+    const [selectedAddress, setSelectedAddress] = useState(false);
+
 
     const DELIVERY_FEE = 5.00;      
     const TAX_RATE = 0.08;        
@@ -51,11 +58,20 @@ import axiosInstance from "../../lib/axiosInstance.js";
           title: 'Product removed from cart',
         });
     };
-
-
+    useEffect(()=>{
+      dispatch(getAddress({userId: user.id}));
+      setaddress(addresses[0] || "");
+    },[]);
+    useEffect(() => {
+      if (addresses.length > 0 && !address) {
+        setaddress(addresses[0]);
+    }
+}, [addresses, address]);
+    console.log(addresses);
 async function handleCheckout() {
     try {
         // Step 1: Create order in backend
+        setIsPaymentLoading(true);
           const { data } = await axiosInstance.post("/payments/create-order",{
             userId: user.id
           });
@@ -88,11 +104,16 @@ async function handleCheckout() {
                         paymentId: response.razorpay_payment_id,
                         signature: response.razorpay_signature
                     });
-
+                    setIsPaymentLoading(false);
                     if (verifyRes.data.success) {
                         alert("Payment Successful!");
                     } else {
                         alert("Payment Verification Failed!");
+                    }
+                },
+                 modal: {
+                    ondismiss: () => {
+                        setIsPaymentLoading(false); // ⬅️ Enable screen if user closes Razorpay
                     }
                 },
                 theme: {
@@ -106,33 +127,40 @@ async function handleCheckout() {
 
         script.onerror = () => {
             alert("Failed to load Razorpay SDK. Please try again.");
+            setIsPaymentLoading(false);
         };
 
     } catch (error) {
         console.error(error);
         alert("Something went wrong while initiating payment.");
+        setIsPaymentLoading(false);
     }
 }
 
 
     return (
-      <div className='flex md:flex-row flex-col w-full pt-12 '>
+      <div className='flex md:flex-row flex-col w-full pt-12 lg:h-[75vh]  md:[80vh]'>
+        {isPaymentoading && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="loader"></div>
+          </div>
+        )}
         <div className='flex-[2] flex flex-col gap-2  items-center max-h-screen overflow-y-auto bg-black/10 pt-4'>
           {cartProduct.map((product, idx) => (
-            <div className='flex sm:flex-row flex-col  border-[2px] rounded-xl w-[95%] max-h-[32vh] border-gray-300 shadow-lg bg-white ' key={product._id || idx}>
+            <div className='flex sm:flex-row flex-col  border-[3px] rounded-xl w-[95%] max-h-[32vh] border-gray-300 shadow-lg bg-white ' key={product._id || idx}>
               <img
-                className='h-full min-w-[32vh] w-[32vh] object-cover rounded-lg'
+                className='h-full min-w-[32vh] w-[32vh] object-cover rounded-lg md:block hidden'
                 src={product.productId.image}
                 alt={product.productId.title}
               />
               <div className='flex flex-col py-4 pl-12 gap-2'>
                 <h2 className='text-xl  font-bold mb-2'>{product.productId.title}</h2>
-                <div className='flex flex-row gap-4 text-lg'>
-                  <span className=''>{product.productId.category}</span>
-                  <span className=''>{capitalizeWords(product.productId.brand)}</span>
+                <div className='flex flex-row gap-4 text-md'>
+                  <div className='bg-slate-200 rounded-md p-1'><span className="text-xl font-semibold">Category: </span>{product.productId.category}</div>
+                  <div className='bg-slate-200 rounded-md p-1 px-2'><span className="text-xl font-semibold">Brand : </span>{capitalizeWords(product.productId.brand)}</div>
 
                 </div>
-                <span className=''>{product.productId.description}</span>
+                <span className='hidden md:block text-sm'>{product.productId.description}</span>
                 <div>
                   
                 </div>
@@ -151,6 +179,20 @@ async function handleCheckout() {
         </div>
 
         <div className='flex-[1] px-8'>
+          <div>
+            <h1 className='text-2xl font-bold mb-4'>Address</h1>
+            <div className="relative  w-full flex flex-col">
+                <div  className='p-4 border rounded-lg shadow-md'>
+                  <h3 className='text-lg font-semibold'>{address.label}</h3>
+                  <p>{address.street}, {address.city}, {address.state}, {address.postalCode}</p>
+                  <p>{address.country}</p>
+              </div>
+              <Button className="" onClick={()=>setSelectedAddress(true)} >Change Address</Button>
+              {selectedAddress && (
+                <AddressChoiceModal setaddress={setaddress} setSelectedAddress={setSelectedAddress} />
+              )}
+            </div>
+          </div>
           <div className='sticky top-20'>
             {cartProduct.length > 0 && (
               <div className="mt-8 p-6 bg-white rounded-xl shadow-lg shadow-black/25">

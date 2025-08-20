@@ -19,7 +19,7 @@ function AddressPage() {
       </div>
       {
         addresses.length > 0 ? (
-          <div className='flex flex-col gap-4 p-4 overflow-y-auto'>
+          <div className='flex flex-col gap-4 p-4 ow-y-auto'>
             {addresses.map((address, index) => (
               <div key={index} className='p-4 border rounded-lg shadow-md'>
                 <h3 className='text-lg font-semibold'>{address.label}</h3>
