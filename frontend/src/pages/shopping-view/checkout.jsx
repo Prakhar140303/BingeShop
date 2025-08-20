@@ -180,7 +180,7 @@ async function handleCheckout() {
 
         <div className='flex-[1] px-8'>
           <div>
-            <h1 className='text-2xl font-bold mb-4'>Address</h1>
+            <h1 className='text-2xl font-bold mb-4 w-full text-center'>Address</h1>
             <div className="relative  w-full flex flex-col">
                 <div  className='p-4 border rounded-lg shadow-md'>
                   <h3 className='text-lg font-semibold'>{address.label}</h3>
