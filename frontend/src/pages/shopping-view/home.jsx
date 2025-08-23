@@ -5,10 +5,45 @@ import { useSelector, useDispatch } from 'react-redux';
 import ShoppingProductTile from '../../components/shopping-view/product-tile';
 import { fetchAllProduct } from '@/store/shop/product-slice';
 import FAQSection from '@/components/shopping-view/FAQSection';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+// skeletion for product tile
+function ShoppingProductTileSkeleton() {
+  return (
+    <Card className="shadow-2xl shadow-black rounded-xl overflow-hidden">
+      {/* Image placeholder */}
+      <div className="w-full h-48 bg-muted flex items-center justify-center">
+        <Skeleton className="w-full h-full" />
+      </div>
+
+      <CardContent className="p-4 space-y-3">
+        {/* Title */}
+        <Skeleton className="h-6 w-3/4" />
+
+        {/* Price + Rating */}
+        <div className="flex justify-between items-center">
+          <Skeleton className="h-4 w-20" />
+          <Skeleton className="h-4 w-12" />
+        </div>
+
+        {/* Tags / chips */}
+        <div className="flex gap-2">
+          <Skeleton className="h-6 w-16" />
+          <Skeleton className="h-6 w-16" />
+        </div>
+      </CardContent>
+
+      <CardFooter className="p-4">
+        <Skeleton className="h-10 w-full rounded-md" />
+      </CardFooter>
+    </Card>
+  );
+}
+
 function ShoppingHome() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { allProduct } = useSelector((state) => state.shopProduct); 
+  const { allProduct, isProductLoading } = useSelector((state) => state.shopProduct); 
 
   const brandLogos = [
     "https://cdn.brandfetch.io/nike.com/w/512/h/178/logo?c=1id83BrBUv9aNb1zf02",
@@ -20,6 +55,7 @@ function ShoppingHome() {
   ];
 
   const repeatedLogos = [...brandLogos, ...brandLogos]; // duplicate for seamless loop
+
 
   useEffect(() => {
     dispatch(fetchAllProduct({}));
@@ -85,9 +121,13 @@ function ShoppingHome() {
       {/* Sale Products */}
       <div className='flex flex-row gap-8 justify-around bg-[#E1D9EA] my-2 overflow-x-auto rounded-lg no-scrollbar'>
         {
-          allProduct.filter(product => product.salePrice > 0).map((product) => (
+         !isProductLoading ?  allProduct.filter(product => product.salePrice > 0).slice(0, 15).map((product) => (
             <div className='min-w-[40vh] py-12' key={product._id}>
               <ShoppingProductTile product={product} isHome={true} />
+            </div>
+          )) : [...Array(4)].map((_, index) => (
+            <div className='min-w-[40vh] py-12' key={index}>
+              <ShoppingProductTileSkeleton />
             </div>
           ))
         }
