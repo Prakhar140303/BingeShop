@@ -7,9 +7,9 @@ import OrderPage from '@/components/shopping-view/OrderPage';
 function ShoppingAccount() {
   let [option, setOption] = useState('account');
   return (
-    <div className='flex flex-row gap-6 px-2 h-[75vh]'>
+    <div className='flex flex-row gap-6 px-2  bg-slate-100'>
       {/* side bar */}
-      <div className='flex-[1] flex flex-col '>
+      <div className='flex-[1] md:flex hidden flex-col '>
         <div className='text-2xl font-bold  hover:cursor-pointer p-4 py-8 hover:bg-slate-200' onClick={()=>setOption('account')}>Account Settings</div>
         <Separator />
         <div className='text-2xl font-bold  hover:cursor-pointer p-4 py-8 hover:bg-slate-200'onClick={()=>setOption('address')}>Address</div>
@@ -21,7 +21,7 @@ function ShoppingAccount() {
       {/* main content */}
       <div className='flex-[4]'>
         {
-          option === 'account' && <AccountPage />
+          option === 'account' && <AccountPage setOption = {setOption}/>
         } 
         {
           option === 'address' && <AddressPage/>

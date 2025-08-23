@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axiosInstance from "@/lib/axiosInstance";
+import { Trophy } from "lucide-react";
 const initialState = {
     isAuthenticated: false,
     isLoading : true,
@@ -53,6 +54,23 @@ export const checkAuth = createAsyncThunk('/auth/checkAuth', async () => {
         });
         return response.data;  
     });
+
+export const terminateAccount = createAsyncThunk('/auth/terminate', async (_,{getState,rejectWithValue}) => {
+    try{
+        const {user}= getState().auth;
+        console.log({user}, "user in terminateAccount");
+        const userId = user.id;
+        const response = await axiosInstance.delete(`/auth/terminate-account/${userId}`,{ withCredentials: true });
+        return response.data;
+    }catch(error) {
+        if (error.response) {
+            return rejectWithValue(error.response.data);
+        } else {
+            return rejectWithValue({ message: "Network Error" });
+        }
+    }
+});
+
 export const getAddress = createAsyncThunk('/auth/address/get-address', async (_,{getState,rejectWithValue}) => {
     try{
         const {user}= getState().auth;
@@ -130,6 +148,18 @@ const authSlice = createSlice({
              state.user = null;
              state.isAuthenticated = false;
          })
+         .addCase(terminateAccount.pending, (state) => {
+            state.isLoading = true;
+        })
+        .addCase(terminateAccount.fulfilled, (state ) => {
+            state.isLoading = false;
+            state.user = null;             // user deleted
+            state.isAuthenticated = false; // no longer logged in
+        })
+        .addCase(terminateAccount.rejected, (state) => {
+            state.isLoading = false;
+            // keep the user data if termination failed
+        })
          .addCase(getAddress.pending,(state)=>{
              state.isLoadingAddress = true;
              state.addresses =[];

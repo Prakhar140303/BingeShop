@@ -26,7 +26,7 @@ function ShoppingHome() {
   }, []);
 
   return (
-    <div className='flex flex-col gap-6 px-2'>
+    <div className='flex flex-col gap-6 px-2 bg-slate-100'>
       {/* Hero Section */}
       <div className='flex md:flex-row-reverse flex-col m-4 py-4 px-2 justify-around items-center bg-[#E1D9EA] rounded-xl'>
         <div>

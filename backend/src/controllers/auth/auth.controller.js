@@ -95,5 +95,25 @@ export const LogoutController  = (req, res) => {
         message : "User logged out successfully"});
 }
 
+export const TerminateAccountController = async (req, res) => {
+    const userId = req.params.userId;
+    try{
+        const deletedUser = await User.findByIdAndDelete(userId);
+        if(!deletedUser){   
+            return res.status(400).json({
+                success : false,
+                message : "User not found"});
+        };
+        res.clearCookie('token').json({
+            success : true,
+            message : "User account terminated successfully"});
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({
+            success : false,
+            message : "Something went wrong in TerminateAccount-controller"});
+        }
+}
+
 
 

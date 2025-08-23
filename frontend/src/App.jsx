@@ -19,8 +19,10 @@ import UnauthPage from './pages/unauth-page/index.jsx'
 import { useSelector,useDispatch } from 'react-redux'
 import { checkAuth } from './store/auth-slice/index.js'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { Toaster } from "react-hot-toast";
 function App() {
   const {isAuthenticated,user,isLoading} = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
   console.log("IN app : ",{user});
   useEffect(() => {
@@ -39,7 +41,8 @@ function App() {
   }
   console.log('import.meta.env.MODE : ',import.meta.env.MODE);
   return ( 
-    <div className='flex flex-col overflow-hidden bg-white'>
+    <div className='flex flex-col overflow-hidden bg-white ' >
+      <Toaster position="top-center" reverseOrder={false} />
       <Routes>
         <Route path="/" element={<Navigate to="/auth/login" replace />} />
         <Route path='/auth' element={<CheckAuth isAuthenticated={isAuthenticated} user={user}>

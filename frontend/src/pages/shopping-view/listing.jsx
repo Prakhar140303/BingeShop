@@ -6,6 +6,8 @@ import React,{useState, useEffect} from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowDownUp, UndoIcon } from 'lucide-react'
 import { sortOptions } from '@/config'
+import { Card, CardContent, CardFooter } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import { fetchAllFilteredProducts,fetchCartProduct } from '@/store/shop/product-slice'
 import ShoppingProductTile from '@/components/shopping-view/product-tile'
 import { useDispatch, useSelector } from 'react-redux'
@@ -16,7 +18,40 @@ const FilterMap ={
   "title-atoz" :3,
   "title-ztoa" :4,
 }
-console.log(FilterMap["price-lowtohigh"]);
+
+
+function ShoppingProductTileSkeleton() {
+  return (
+    <Card className="shadow-2xl shadow-black rounded-xl overflow-hidden">
+      {/* Image placeholder */}
+      <div className="w-full h-48 bg-muted flex items-center justify-center">
+        <Skeleton className="w-full h-full" />
+      </div>
+
+      <CardContent className="p-4 space-y-3">
+        {/* Title */}
+        <Skeleton className="h-6 w-3/4" />
+
+        {/* Price + Rating */}
+        <div className="flex justify-between items-center">
+          <Skeleton className="h-4 w-20" />
+          <Skeleton className="h-4 w-12" />
+        </div>
+
+        {/* Tags / chips */}
+        <div className="flex gap-2">
+          <Skeleton className="h-6 w-16" />
+          <Skeleton className="h-6 w-16" />
+        </div>
+      </CardContent>
+
+      <CardFooter className="p-4">
+        <Skeleton className="h-10 w-full rounded-md" />
+      </CardFooter>
+    </Card>
+  );
+}
+
 
 function  ShoppingListing() {
   // importing the elements from the hooks
@@ -29,7 +64,7 @@ function  ShoppingListing() {
 
   const dispatch = useDispatch();
   
-  const {FilteredProductList,totalPages, cartProduct,isCartLoading} = useSelector((state) => state.shopProduct);  
+  const {FilteredProductList,totalPages, cartProduct,isCartLoading,isProductLoading} = useSelector((state) => state.shopProduct);  
   const {user} = useSelector((state)=> state.auth);
   const handleSort = (value) => {
     console.log({value});
@@ -71,9 +106,7 @@ function  ShoppingListing() {
 
 
   useEffect(()=>{
-    if(user?.id){
-      dispatch(fetchCartProduct({userId : user.id}));
-    }
+    dispatch(fetchCartProduct({userId : user.id}));
   },[dispatch,user?.id])
 
   useEffect(()=>{
@@ -114,7 +147,7 @@ function  ShoppingListing() {
           </div>
         </div>
         <div className='grid grid-cols-1 gap-8 my-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 p-4'>
-          { !isCartLoading ?
+          { !isCartLoading && !isProductLoading ?
             FilteredProductList.map((product) =>{ 
                let cartEntry = cartProduct?.find((c) => c.productId._id === product._id);
               if(!cartEntry){
@@ -144,9 +177,12 @@ function  ShoppingListing() {
           </Dialog>
                 </div>
               
-            )}) : <div>
-              <p className='text-center text-muted-foreground'>Loading products...</p>
-            </div>
+            )}) : 
+              (
+                Array.from({ length: 12 }).map((_, i) => (
+                    <ShoppingProductTileSkeleton key={i} />
+                ))
+              )
           }
         </div>
         <div className='flex items-center justify-center gap-4 py-4'>

@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { getAddress } from "@/store/auth-slice/index.js";
 import AddressChoiceModal from '@/components/shopping-view/AddressChoice.jsx'
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+
   function capitalizeWords(str) {
     if(!str) return '';
     return str
@@ -17,7 +20,7 @@ import AddressChoiceModal from '@/components/shopping-view/AddressChoice.jsx'
 
   export default function ShoppingCheckout() {
     const dispatch = useDispatch();
-    const { cartProduct } = useSelector((state) => state.shopProduct);
+    const { cartProduct,isCartLoading } = useSelector((state) => state.shopProduct);
     const {addresses} = useSelector((state) => state.auth);
     const { user } = useSelector((state) => state.auth);
     const { toast } = useToast();
@@ -139,14 +142,14 @@ async function handleCheckout() {
 
 
     return (
-      <div className='flex md:flex-row flex-col w-full pt-12 lg:h-[75vh]  md:[80vh]'>
+      <div className='flex md:flex-row flex-col w-full pt-12 lg:h-[78.2vh]  md:[80vh]'>
         {isPaymentoading && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="loader"></div>
           </div>
         )}
         <div className='flex-[2] flex flex-col gap-2  items-center max-h-screen overflow-y-auto bg-black/10 pt-4'>
-          {cartProduct.map((product, idx) => (
+          {!isCartLoading ? cartProduct.map((product, idx) => (
             <div className='flex sm:flex-row flex-col  border-[3px] rounded-xl w-[95%] max-h-[32vh] border-gray-300 shadow-lg bg-white ' key={product._id || idx}>
               <img
                 className='h-full min-w-[32vh] w-[32vh] object-cover rounded-lg md:block hidden'
@@ -175,7 +178,12 @@ async function handleCheckout() {
                 </div>
               </div>
             </div>
-          ))}
+          )) : (    
+                Array.from({ length: 3 }).map((_, i) => (
+                    <CartProductSkeleton key={i} />
+                ))
+          )
+        }
         </div>
 
         <div className='flex-[1] px-8'>
@@ -231,3 +239,34 @@ async function handleCheckout() {
       </div>
     )
   }
+
+  function CartProductSkeleton() {
+  return (
+    <Card className="flex sm:flex-row flex-col border-[3px] rounded-xl w-[95%] max-h-[32vh] border-gray-300 shadow-lg bg-white animate-pulse">
+      {/* Image placeholder */}
+      <Skeleton className="h-full min-w-[32vh] w-[32vh] object-cover rounded-lg md:block hidden" />
+
+      {/* Content placeholder */}
+      <div className="flex flex-col py-4 pl-12 gap-2 w-full">
+        {/* Title */}
+        <Skeleton className="h-6 w-3/4" />
+
+        {/* Category & Brand */}
+        <div className="flex flex-row gap-4">
+          <Skeleton className="h-6 w-28 rounded-md" />
+          <Skeleton className="h-6 w-20 rounded-md" />
+        </div>
+
+        {/* Description */}
+        <Skeleton className="h-4 w-full hidden md:block" />
+
+        {/* Quantity Controls */}
+        <div className="w-[20vh] flex flex-row items-center justify-between mt-2">
+          <Skeleton className="h-10 w-10 rounded-md" />
+          <Skeleton className="h-6 w-8" />
+          <Skeleton className="h-10 w-10 rounded-md" />
+        </div>
+      </div>
+    </Card>
+  );
+}

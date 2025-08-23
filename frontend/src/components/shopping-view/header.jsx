@@ -34,7 +34,7 @@ function HeaderRightContent(){
     dispatch(logoutUser());
   }
   return <div className='flex lg:items-center lg:flex-row flex-col gap-4 '>
-    <motion.div initial={{scale:1}} whileHover={{scale :1.15}}> 
+    <motion.div initial={{scale:1}} whileHover={{scale :1.1}}> 
       <Button varient='outline' size='icon' onClick ={()=>{navigate('/shop/checkout')}}>
         <ShoppingCart className='size-6'/>
         <span className='sr-only'>User Cart</span>
@@ -67,10 +67,8 @@ function HeaderRightContent(){
   </div>
 }
 function ShoppingHeader() {
-  const { user} = useSelector((state) => state.auth);
-  console.log("IN header : ",{user});
   return (
-    <header className='sticky top-0 z-40 w-full border-b bg-background bg-slate-100'>
+    <header className='fixed top-0 z-40 w-full border-b bg-background bg-slate-100 '>
       <div className='flex h-16 items-center justify-between px-4 md:px-6'>
         <Link to='/shop/home' className='flex items-center gap-2'>
         <House  className='size-10'/>
