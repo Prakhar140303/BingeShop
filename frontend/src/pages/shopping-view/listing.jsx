@@ -185,12 +185,17 @@ function  ShoppingListing() {
               )
           }
         </div>
+        <div  className='flex flex-col items-center justify-center  py-4'>
+         <span className='text-xl font-semibold'>Page {page}</span>
         <div className='flex items-center justify-center gap-4 py-4'>
           <Button onClick={() => goToPage(page - 1)} disabled={page === 1}>
           Prev
         </Button>
-        <span>Page {page}</span>
+          <span className='text-4xl font-semibold'> . . . .</span>
+       
         <Button onClick={() => goToPage(page + 1) } disabled={page === totalPages}>Next</Button>
+
+        </div >
 
         </div>
       </div>

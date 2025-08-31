@@ -43,8 +43,7 @@ app.use("/api/shop/orders", orderRoutes);
 
 
 
-const __dirname = path.resolve();
-console.log(path.join(__dirname,"../frontend","dist","index.html"));
+    const __dirname = path.resolve();
 if(process.env.NODE_ENV === "production") {
 
     app.use(express.static(path.join(__dirname,"../frontend/dist")));

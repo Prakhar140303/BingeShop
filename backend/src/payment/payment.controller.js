@@ -63,7 +63,7 @@ const verifyPayment = async (req, res) => {
     if (generatedSignature === signature) {
         try {
             const cartProducts = await cartModel.find({ userId }).populate('productId');
-
+            
             if (!cartProducts || cartProducts.length === 0) {
                 return res.status(404).json({ success: false, message: "Cart is empty" });
             }
