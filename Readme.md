@@ -34,11 +34,11 @@ BingeShop is a full-stack e-commerce platform built with React (frontend) and No
   - Custom components: cards, badges, sheets, toasts, dropdowns
   - Animations with Framer Motion
 
-- **Mock Payment Integration**
-  - Simulated payments using Razorpay for real checkout experience
-
 - **FAQ Section**
   - Interactive FAQ with expand/collapse animations
+
+- **Mock Payment Integration**
+  - Simulated payments using Razorpay for real checkout experience
 
 ## Tech Stack
 
@@ -53,6 +53,27 @@ BingeShop is a full-stack e-commerce platform built with React (frontend) and No
 
 - Node.js & npm
 - MongoDB
+
+### Sample Environment Variables
+
+#### Frontend (`frontend/.env`)
+```
+VITE_RAZORPAY_KEY_ID=
+```
+
+#### Backend (`backend/.env`)
+```
+MONGO_URL=
+PORT=5000
+CLIENT_SECRET_KEY=
+
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+NODE_ENV=developement
+```
 
 ### Installation (Development Mode)
 
@@ -214,4 +235,4 @@ BingeShop/
 
 ## License
 
-This project is licensed under the MIT
+This project is licensed
