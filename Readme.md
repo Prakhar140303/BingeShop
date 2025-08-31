@@ -1,6 +1,6 @@
 # BingeShop
 
-BingeShop is a full-stack e-commerce platform built with React (frontend) and Node.js/Express (backend). It provides a modern shopping experience with user authentication, product management, and seamless checkout.
+BingeShop is a full-stack e-commerce platform built with React (frontend) and Node.js/Express (backend). It provides a modern shopping experience with user authentication, product management, seamless checkout, and mock payment simulation using Razorpay.
 
 ## Features
 
@@ -34,6 +34,9 @@ BingeShop is a full-stack e-commerce platform built with React (frontend) and No
   - Custom components: cards, badges, sheets, toasts, dropdowns
   - Animations with Framer Motion
 
+- **Mock Payment Integration**
+  - Simulated payments using Razorpay for real checkout experience
+
 - **FAQ Section**
   - Interactive FAQ with expand/collapse animations
 
@@ -42,7 +45,7 @@ BingeShop is a full-stack e-commerce platform built with React (frontend) and No
 - **Frontend:** React, Vite, Redux Toolkit, Tailwind CSS, Framer Motion
 - **Backend:** Node.js, Express, MongoDB, Mongoose
 - **Authentication:** JWT, bcryptjs
-- **Other:** Radix UI, Lucide Icons
+- **Other:** Radix UI, Lucide Icons, Razorpay (mock payment)
 
 ## Getting Started
 
