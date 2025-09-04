@@ -30,7 +30,7 @@ const createOrder = async (req, res) => {
         receipt: `receipt_${new Date().getTime()}`,
     };
     try{
-        razorpayInstance.orders.create(options,(error, order) => {
+         razorpayInstance.orders.create(options,(error, order) => {
             if(error){
                 return res.status(500).json({
                     success: false,
@@ -54,7 +54,7 @@ const createOrder = async (req, res) => {
 
 const verifyPayment = async (req, res) => {
     const { orderId, paymentId, signature, userId, shippingAddress } = req.body;
-    const secret = process.env.RAZORPAY_KEY_SECRET;
+    const secret = process.env. _KEY_SECRET;
 
     const hmac = crypto.createHmac("sha256", secret);
     hmac.update(orderId + "|" + paymentId);

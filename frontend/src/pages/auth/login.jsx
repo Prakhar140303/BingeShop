@@ -11,7 +11,7 @@ function AuthLogin() {
     email : '',
     password : '',
   }
-  const [formData,setFromData] = useState(initialState);
+  const [formData,setFormData] = useState(initialState);
   const dispatch  = useDispatch();
   const navigate = useNavigate();
   const {toast} = useToast();
@@ -47,7 +47,7 @@ function AuthLogin() {
         formControls={LoginFormControls}
         buttonText={'Sign up'}
         formData={formData}
-        setFormData={setFromData}
+        setFormData={setFormData}
         onSubmit={onSubmit}
       />
       <p className='mt-2'>Don't have an account

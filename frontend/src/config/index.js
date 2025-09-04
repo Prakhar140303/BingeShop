@@ -162,3 +162,52 @@ export const addProductFormElements = [
       { id: "h&m", label: "H&M" }
     ]
 };
+
+export const addAddressFormElements = [
+  {
+    label: "Label",
+    name: "label",
+    componentType: "select",
+    options: [
+      { id: "home", label: "Home" },
+      { id: "work", label: "Work" },
+      { id: "other", label: "Other" },
+    ],
+    placeholder: "Select address label",
+  },
+  {
+    label: "Street",
+    name: "street",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter street address",
+  },
+  {
+    label: "City",
+    name: "city",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter city",
+  },
+  {
+    label: "State",
+    name: "state",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter state",
+  },
+  {
+    label: "Postal Code",
+    name: "postalCode",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter postal code",
+  },
+  {
+    label: "Country",
+    name: "country",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter country",
+  },
+];

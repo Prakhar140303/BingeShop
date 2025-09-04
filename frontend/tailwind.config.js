@@ -66,6 +66,19 @@ export default {
 		}
   	}
   },
-  plugins: [animate],
+  plugins: [animate,
+	function({ addComponents }) {
+      addComponents({
+        ".selected-hover": {
+          "@apply rounded-xl  hover:bg-primary/70 hover:text-white": {},
+        },
+        ".selected": {
+          "@apply rounded-xl  bg-primary/70 text-white": {},
+        },
+        ".modal": {
+          "@apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50": {},
+        },
+      })}
+  ],
 }
 
