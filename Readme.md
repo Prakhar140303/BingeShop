@@ -1,6 +1,6 @@
 # BingeShop
 
-BingeShop is a full-stack e-commerce platform built with React (frontend) and Node.js/Express (backend). It provides a modern shopping experience with user authentication, product management, and seamless checkout.
+BingeShop is a full-stack e-commerce platform built with React (frontend) and Node.js/Express (backend). It provides a modern shopping experience with user authentication, product management, seamless checkout, and mock payment simulation using Razorpay.
 
 ## Features
 
@@ -37,12 +37,15 @@ BingeShop is a full-stack e-commerce platform built with React (frontend) and No
 - **FAQ Section**
   - Interactive FAQ with expand/collapse animations
 
+- **Mock Payment Integration**
+  - Simulated payments using Razorpay for real checkout experience
+
 ## Tech Stack
 
 - **Frontend:** React, Vite, Redux Toolkit, Tailwind CSS, Framer Motion
 - **Backend:** Node.js, Express, MongoDB, Mongoose
 - **Authentication:** JWT, bcryptjs
-- **Other:** Radix UI, Lucide Icons
+- **Other:** Radix UI, Lucide Icons, Razorpay (mock payment)
 
 ## Getting Started
 
@@ -50,6 +53,27 @@ BingeShop is a full-stack e-commerce platform built with React (frontend) and No
 
 - Node.js & npm
 - MongoDB
+
+### Sample Environment Variables
+
+#### Frontend (`frontend/.env`)
+```
+VITE_RAZORPAY_KEY_ID=
+```
+
+#### Backend (`backend/.env`)
+```
+MONGO_URL=
+PORT=5000
+CLIENT_SECRET_KEY=
+
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+NODE_ENV=developement
+```
 
 ### Installation (Development Mode)
 
@@ -211,4 +235,4 @@ BingeShop/
 
 ## License
 
-This project is licensed under the MIT
+This project is licensed
