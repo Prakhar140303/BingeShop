@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { getAddress } from '@/store/auth-slice';
 import { Button } from '@/components/ui/button'; 
@@ -17,6 +17,23 @@ const initialAddressValues = {
   country: "",
 };
 
+const AddreessModal = (formData, setFormData,onSubmit,setAddAddressModalOpen) =>{
+
+  return (
+    <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-51'>
+        <div className='min-h-[70vh] min-w-[60vw] flex flex-col gap-2 p-4 md:p-8 bg-white rounded-2xl'>
+          <div className='flex flex-row-reverse items-center w-full p-2' onClick={()=> setAddAddressModalOpen(false)}> <CircleX /></div>
+          <CommonForm 
+            formControls={addAddressFormElements}
+              buttonText={'Add address'}
+              formData={formData}
+              setFormData={setFormData}
+              onSubmit={onSubmit}
+          />
+        </div>
+      </div>
+  )
+}
 
 function AddressPage() {
   const dispatch = useDispatch();
@@ -51,18 +68,7 @@ useEffect(()=>{
           </div>
         )
       }
-      {addAddressModalOpen && <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-51'>
-        <div className='min-h-[70vh] min-w-[60vw] flex flex-col gap-2 p-4 md:p-8 bg-white rounded-2xl'>
-          <div className='flex flex-row-reverse items-center w-full p-2' onClick={()=> setAddAddressModalOpen(false)}> <CircleX /></div>
-          <CommonForm 
-            formControls={addAddressFormElements}
-              buttonText={'Add address'}
-              formData={formData}
-              setFormData={setFormData}
-              onSubmit={onSubmit}
-          />
-        </div>
-      </div>}
+      {addAddressModalOpen && <AddressPage formData ={formData} onSubmit ={onSubmit} setFormData={setFormData} setAddAddressModalOpen={setAddAddressModalOpen} />}
       <div className='flex w-full flex-row-reverse p-4 '>
         <Button onClick ={()=>{setAddAddressModalOpen(true)}}>
           Add address 

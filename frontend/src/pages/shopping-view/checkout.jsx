@@ -24,7 +24,7 @@ import { Skeleton } from "@/components/ui/skeleton";
     const {addresses} = useSelector((state) => state.auth);
     const { user } = useSelector((state) => state.auth);
     const { toast } = useToast();
-    const [isPaymentoading, setIsPaymentLoading] = useState(false);
+    const [isPaymentLoading, setIsPaymentLoading] = useState(false);
     const [address, setaddress] = useState("");
     const [selectedAddress, setSelectedAddress] = useState(false);
 
@@ -85,7 +85,7 @@ async function handleCheckout() {
         }
 
         const order = data.data;
-
+        console.log(order);
         const script = document.createElement("script");
         script.src = "https://checkout.razorpay.com/v1/checkout.js";
         script.async = true;
@@ -105,7 +105,10 @@ async function handleCheckout() {
                     const verifyRes = await axiosInstance.post("/payments/verify-payment", {
                         orderId: response.razorpay_order_id,
                         paymentId: response.razorpay_payment_id,
-                        signature: response.razorpay_signature
+                        signature: response.razorpay_signature,
+                        userId : user.id,
+                        shippingAddress : selectedAddress
+
                     });
                     setIsPaymentLoading(false);
                     if (verifyRes.data.success) {
@@ -143,7 +146,7 @@ async function handleCheckout() {
 
     return (
       <div className='flex md:flex-row flex-col w-full pt-12 lg:h-[78.2vh]  md:[80vh]'>
-        {isPaymentoading && (
+        {isPaymentLoading && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="loader"></div>
           </div>

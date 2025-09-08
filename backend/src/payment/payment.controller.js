@@ -54,8 +54,8 @@ const createOrder = async (req, res) => {
 
 const verifyPayment = async (req, res) => {
     const { orderId, paymentId, signature, userId, shippingAddress } = req.body;
-    const secret = process.env. _KEY_SECRET;
-
+    const secret = process.env.RAZORPAY_KEY_SECRET;
+    console.log(req.body);
     const hmac = crypto.createHmac("sha256", secret);
     hmac.update(orderId + "|" + paymentId);
     const generatedSignature = hmac.digest("hex");
